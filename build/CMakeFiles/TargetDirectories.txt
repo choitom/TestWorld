@@ -1,2 +1,0 @@
-/home/tom/Desktop/sensor_tutorial/build/CMakeFiles/camera.dir
-/home/tom/Desktop/sensor_tutorial/build/CMakeFiles/lidar.dir
