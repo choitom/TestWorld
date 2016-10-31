@@ -1,2 +1,0 @@
-/home/tom/Desktop/TestWorld/build/CMakeFiles/camera.dir
-/home/tom/Desktop/TestWorld/build/CMakeFiles/lidar.dir
