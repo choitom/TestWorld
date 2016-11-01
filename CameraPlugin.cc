@@ -54,13 +54,17 @@ void CameraPlugin::OnUpdate()
 	
 
 	// use Canny algorithm to apply on the image to get contours. (args: input, output, low threshold, high threshold)
-  cv::Mat contours;
-  cv::Canny(image,contours,125,350);
+  Mat contours;
+  Canny(image,contours,125,350);
 
   // invert the image to better show the lines (threshold value below 128 becomes 255)
-  cv::Mat contoursInv;
-  cv::threshold(contours,contoursInv,128, 255, cv::THRESH_BINARY_INV);
+  Mat contoursInv;
+  threshold(contours,contoursInv,128,255,THRESH_BINARY_INV);
 
+	// Hough transform for line detection
+	float PI = 3.141592;
+	std::vector<Vec2f> lines;
+	HoughLines(contours,lines,1,PI/180, 75);
 
 	// camera view display
 	namedWindow("Camera View", CV_WINDOW_AUTOSIZE);
