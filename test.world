@@ -76,6 +76,47 @@
       <elevation>0</elevation>
       <heading_deg>0</heading_deg>
     </spherical_coordinates>
+    <model name='comps_road'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <box>
+              <size>90 10 0.1</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <cast_shadows>0</cast_shadows>
+          <geometry>
+            <box>
+              <size>90 10 0.1</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>model://comps_road/materials/scripts</uri>
+              <uri>model://comps_road/materials/textures</uri>
+              <name>comps_road</name>
+            </script>
+          </material>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <pose frame=''>-2 1 0 0 -0 0</pose>
+    </model>
     <model name='test_model'>
       <link name='box_link'>
         <pose frame=''>0 0 0.4 0 -0 0</pose>
@@ -295,11 +336,6 @@
               <near>0.1</near>
               <far>100</far>
             </clip>
-            <noise>
-              <type>gaussian</type>
-              <mean>0</mean>
-              <stddev>0.007</stddev>
-            </noise>
             <save enabled='0'>
               <path>__default__</path>
             </save>
@@ -400,26 +436,17 @@
       </joint>
       <static>0</static>
       <allow_auto_disable>1</allow_auto_disable>
-      <pose frame=''>0 0 0 0 -0 0</pose>
+      <pose frame=''>-6 3 0 0 -0 0</pose>
     </model>
     <state world_name='default'>
-      <sim_time>120 734000000</sim_time>
-      <real_time>76 931351382</real_time>
-      <wall_time>1477949099 963253473</wall_time>
-      <iterations>66607</iterations>
-      <model name='Lamp Post'>
-        <pose frame=''>6 4.54626 0 0 -0 0</pose>
+      <sim_time>382 240000000</sim_time>
+      <real_time>397 256080242</real_time>
+      <wall_time>1477963050 538340031</wall_time>
+      <iterations>382240</iterations>
+      <model name='comps_road'>
+        <pose frame=''>-2 1 0 0 -0 0</pose>
         <link name='link'>
-          <pose frame=''>6 4.54626 0 0 -0 0</pose>
-          <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 0 0 0 -0 0</acceleration>
-          <wrench>0 0 0 0 -0 0</wrench>
-        </link>
-      </model>
-      <model name='asphalt_plane'>
-        <pose frame=''>-6.40742 6 0 0 -0 0</pose>
-        <link name='link'>
-          <pose frame=''>-6.40742 6 0 0 -0 0</pose>
+          <pose frame=''>-2 1 0 0 -0 0</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
@@ -435,107 +462,33 @@
         </link>
       </model>
       <model name='test_model'>
-        <pose frame=''>0.001899 0.000234 0.15 -1e-06 -0 -0.000721</pose>
+        <pose frame=''>-5.99922 3.00009 0.15 -1e-06 -0 -0.000263</pose>
         <link name='box_link'>
-          <pose frame=''>0.001899 0.000234 0.55 -1e-06 -0 -0.000721</pose>
-          <velocity>0.00049 -0.000992 0.002438 0.001984 0.000979 1e-06</velocity>
-          <acceleration>0.935621 -3.02618 4.91514 2.81257 1.17239 -3.04142</acceleration>
-          <wrench>0.935621 -3.02618 4.91514 0 -0 0</wrench>
+          <pose frame=''>-5.99922 3.00009 0.55 -1e-06 -0 -0.000263</pose>
+          <velocity>0.000422 -0.000902 0.001937 0.001805 0.000839 4e-06</velocity>
+          <acceleration>0.800113 -2.90871 4.31924 2.58592 1.45499 -3.04614</acceleration>
+          <wrench>0.800113 -2.90871 4.31924 0 -0 0</wrench>
         </link>
         <link name='camera_link'>
-          <pose frame=''>0.501899 -0.000127 0.65 -1e-06 -0 -0.000721</pose>
-          <velocity>0.000581 -0.001182 0.001946 0.001985 0.000983 1.3e-05</velocity>
-          <acceleration>1.13127 -3.5625 3.92842 2.81629 1.17186 -3.03927</acceleration>
-          <wrench>1.13127 -3.5625 3.92842 0 -0 0</wrench>
+          <pose frame=''>-5.49922 2.99995 0.65 -1e-06 -0 -0.000263</pose>
+          <velocity>0.000502 -0.001068 0.001517 0.001806 0.000841 2.4e-05</velocity>
+          <acceleration>0.970529 -3.42199 3.47586 2.58962 1.45586 -3.03821</acceleration>
+          <wrench>0.970529 -3.42199 3.47586 0 -0 0</wrench>
         </link>
         <link name='lidar'>
-          <pose frame=''>0.001899 0.000234 0.15 -1e-06 -0 -0.000721</pose>
-          <velocity>8.8e-05 -0.000195 0.002439 0.001986 0.000983 1.4e-05</velocity>
-          <acceleration>0.14598 -0.63336 4.91561 2.81706 1.1716 -3.03913</acceleration>
-          <wrench>0.14598 -0.63336 4.91561 0 -0 0</wrench>
+          <pose frame=''>-5.99922 3.00009 0.15 -1e-06 -0 -0.000263</pose>
+          <velocity>8.1e-05 -0.000176 0.001937 0.001806 0.000841 2.5e-05</velocity>
+          <acceleration>0.127499 -0.606617 4.31963 2.59038 1.45568 -3.03781</acceleration>
+          <wrench>0.127499 -0.606617 4.31963 0 -0 0</wrench>
         </link>
       </model>
     </state>
     <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose frame=''>17.9409 -18.1097 8.12468 0 0.275643 2.35619</pose>
+        <pose frame=''>22.2723 -18.2277 8.04182 0 0.275643 2.35619</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
       </camera>
     </gui>
-    <model name='asphalt_plane'>
-      <static>1</static>
-      <link name='link'>
-        <collision name='collision'>
-          <geometry>
-            <box>
-              <size>90 90 0.1</size>
-            </box>
-          </geometry>
-          <max_contacts>10</max_contacts>
-          <surface>
-            <contact>
-              <ode/>
-            </contact>
-            <bounce/>
-            <friction>
-              <ode/>
-            </friction>
-          </surface>
-        </collision>
-        <visual name='visual'>
-          <cast_shadows>0</cast_shadows>
-          <geometry>
-            <box>
-              <size>90 90 0.1</size>
-            </box>
-          </geometry>
-          <material>
-            <script>
-              <uri>model://asphalt_plane/materials/scripts</uri>
-              <uri>model://asphalt_plane/materials/textures</uri>
-              <name>vrc/asphalt</name>
-            </script>
-          </material>
-        </visual>
-        <self_collide>0</self_collide>
-        <kinematic>0</kinematic>
-        <gravity>1</gravity>
-      </link>
-      <pose frame=''>-6.40742 6 0 0 -0 0</pose>
-    </model>
-    <model name='Lamp Post'>
-      <static>1</static>
-      <link name='link'>
-        <collision name='collision'>
-          <geometry>
-            <mesh>
-              <uri>model://lamp_post/meshes/lamp_post.dae</uri>
-            </mesh>
-          </geometry>
-          <max_contacts>10</max_contacts>
-          <surface>
-            <contact>
-              <ode/>
-            </contact>
-            <bounce/>
-            <friction>
-              <ode/>
-            </friction>
-          </surface>
-        </collision>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>model://lamp_post/meshes/lamp_post.dae</uri>
-            </mesh>
-          </geometry>
-        </visual>
-        <self_collide>0</self_collide>
-        <kinematic>0</kinematic>
-        <gravity>1</gravity>
-      </link>
-      <pose frame=''>6 4.54626 0 0 -0 0</pose>
-    </model>
   </world>
 </sdf>

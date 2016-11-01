@@ -12,4 +12,4 @@ add_library(lidar SHARED LidarPlugin.cc)
 target_link_libraries(lidar ${GAZEBO_LIBRARIES} ${Boost_LIBRARIES})
 
 add_library(camera SHARED CameraPlugin.cc)
-target_link_libraries(camera ${GAZEBO_LIBRARIES} ${Boost_LIBRARIES} ${OpenCV_LIBS})
+target_link_libraries(camera ${GAZEBO_LIBRARIES} ${Boost_LIBRARIES} ${OpenCV_LIBRARIES})
