@@ -55,7 +55,7 @@ void CameraPlugin::OnUpdate()
 
 	// use Canny algorithm to apply on the image to get contours. (args: input, output, low threshold, high threshold)
   cv::Mat contours;
-  cv::Canny(image,contours,125,350);
+  cv::Canny(imageData,contours,125,350, 3);
 
   // invert the image to better show the lines (threshold value below 128 becomes 255)
   cv::Mat contoursInv;
