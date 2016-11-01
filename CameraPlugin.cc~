@@ -14,8 +14,11 @@
 #include <opencv2/core/core.hpp>
 #include "CameraPlugin.hh"
 
+#define PI 3.14159265359
+
 using namespace gazebo;
 using namespace cv;
+using namespace std;
 
 // Register this plugin with the simulator
 GZ_REGISTER_SENSOR_PLUGIN(CameraPlugin)
@@ -44,30 +47,25 @@ void CameraPlugin::Load(sensors::SensorPtr _sensor, sdf::ElementPtr /*_sdf*/)
 
 void CameraPlugin::OnUpdate()
 {
-	// get image width, height, and data
-	int width = (int) this->parentSensor->GetImageWidth(0);
-	int height = (int) this->parentSensor->GetImageHeight(0);
+	// get image width, height and data
+	int width = (int)this->parentSensor->GetImageWidth(0);
+	int height = (int)this->parentSensor->GetImageHeight(0);
 	const unsigned char* imageData = this->parentSensor->GetImageData(0);
 
 	// create image matrix
 	Mat image = Mat(height, width, CV_8UC3, const_cast<unsigned char*>(imageData));
-	
 
-	// use Canny algorithm to apply on the image to get contours. (args: input, output, low threshold, high threshold)
-  Mat contours;
-  Canny(image,contours,125,350);
+	// use Canny algorithm to apply on the image to get contours
+	Mat contours;
+	Canny(image,contours,125,350);
 
-  // invert the image to better show the lines (threshold value below 128 becomes 255)
-  Mat contoursInv;
-  threshold(contours,contoursInv,128,255,THRESH_BINARY_INV);
+	// invert the image to better show the lines (threshold value below 128 becomes 255)
+	Mat contoursInv;
+	threshold(contours,contoursInv,128,255,THRESH_BINARY_INV);
 
-	// Hough transform for line detection
-	float PI = 3.141592;
-	std::vector<Vec2f> lines;
-	HoughLines(contours,lines,1,PI/180, 75);
-
-	// camera view display
+	// camera display
 	namedWindow("Camera View", CV_WINDOW_AUTOSIZE);
-	imshow("Camera View", contoursInv);
+	imshow("Contour Inverse", contoursInv);
+	imshow("Contour", contours);
 	waitKey(4);
 }
