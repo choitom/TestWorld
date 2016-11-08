@@ -8,8 +8,11 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 link_directories(${GAZEBO_LIBRARY_DIRS})
 list(APPEND CMAKE_CXX_FLAGS "${GAZEBO_CXX_FLAGS}")
 
+add_library(data SHARED dataProcessing.cc)
+target_link_libraries(data ${GAZEBO_LIBRARIES} ${Boost_LIBRARIES})
+
 add_library(lidar SHARED LidarPlugin.cc)
-target_link_libraries(lidar ${GAZEBO_LIBRARIES} ${Boost_LIBRARIES})
+target_link_libraries(lidar data ${GAZEBO_LIBRARIES} ${Boost_LIBRARIES})
 
 add_library(camera SHARED CameraPlugin.cc)
 target_link_libraries(camera ${GAZEBO_LIBRARIES} ${Boost_LIBRARIES} ${OpenCV_LIBS})
