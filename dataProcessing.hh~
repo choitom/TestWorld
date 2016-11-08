@@ -9,7 +9,7 @@
 #include <vector>
 #include <map>
 
-//#include "LidarInfo.hh"
+#include "LidarInfo.hh"
 
 namespace gazebo
 {
@@ -21,7 +21,7 @@ namespace gazebo
 			static void UpdateCameraData(int newX, int newY);
 			static void UpdateLidarData(LidarPosition pos, std::vector<double>* newData);
 			static void GetLanePosition();			
-			static void GetLidarData(LidarPosition pos);
+			static std::vector<double>* GetLidarData(LidarPosition pos);
 		private: 
 			static int lanePositionX;
 			static int lanePositionY;

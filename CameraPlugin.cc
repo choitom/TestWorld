@@ -62,6 +62,9 @@ void CameraPlugin::OnUpdate()
 	// invert the image to better show the lines (threshold value below 128 becomes 255)
 	Mat contoursInv;
 	threshold(contours,contoursInv,128,255,THRESH_BINARY_INV);
+	
+	// update way point data	
+	dataProcessing::UpdateCameraData(0, 0);	
 
 	// camera display
 	imshow("Contour Inverse", contoursInv);

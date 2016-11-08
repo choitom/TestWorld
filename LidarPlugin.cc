@@ -52,12 +52,13 @@ void LidarPlugin::OnUpdate()
 	}
 	
 	dataProcessing::UpdateLidarData(FRONT, rays);
+	
 	// For each beam, print out the distance to an object.
 	// If no object detect, prints out 'inf'
-	rays = dataProcessing::GetLidarData(FRONT);
+	/*rays = dataProcessing::GetLidarData(FRONT);
 	std:: cout << "\nLidar Info\n";
 	for(auto &i : *rays)
 	{
 		std:: cout << "(" << i << ") ";
-	}
+	}*/
 }

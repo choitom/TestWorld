@@ -13,17 +13,20 @@ int dataProcessing::lanePositionX = 0;
 int dataProcessing::lanePositionY = 0;
 std::vector<double>* dataProcessing::frontLidarData = new std::vector<double>();
 std::vector<double>* dataProcessing::backLidarData = new std::vector<double>();
-//static std::map<LidarPosition, LidarInfo> dataProcessing::lidarInfo = std::map<LidarPosition, LidarInfo>();
+std::map<LidarPosition, LidarInfo> dataProcessing::lidarInfo = std::map<LidarPosition, LidarInfo>();
 
+// When initializing a lidar, store its information such as minimum angle, resoltuion and range
 void dataProcessing::InitLidar(LidarPosition pos, double minAngle, double resolution, double maxRange, int numRays) {
-
+	lidarInfo[pos] = LidarInfo(minAngle, resolution, maxRange, numRays);
 }
 
+// Update way point after image processing
 void dataProcessing::UpdateCameraData(int newLanePositionX, int newLanePositionY) {
     lanePositionX = newLanePositionX;
     lanePositionY = newLanePositionY;
 }
 
+// Update lidar data
 void dataProcessing::UpdateLidarData(LidarPosition pos, std::vector<double>* newData) {
 	switch (pos) {
 		case FRONT:
@@ -37,12 +40,14 @@ void dataProcessing::UpdateLidarData(LidarPosition pos, std::vector<double>* new
 		default:
 		break;
 	}
+	std::cout << "Update(Lidar)\n";	// check for update
 }
 
 void dataProcessing::GetLanePosition() {
-		
+	
 }
 
+// Retrieve lidar data
 std::vector<double>* dataProcessing::GetLidarData(LidarPosition pos) {
 	switch (pos) {
 		case FRONT:

@@ -9,7 +9,7 @@
 #include <vector>
 #include <map>
 
-//#include "LidarInfo.hh"
+#include "LidarInfo.hh"
 
 namespace gazebo
 {
@@ -27,7 +27,7 @@ namespace gazebo
 			static int lanePositionY;
 			static std::vector<double>* frontLidarData;
 			static std::vector<double>* backLidarData;
-			//static std::map<LidarPosition, LidarInfo> lidarInfo;
+			static std::map<LidarPosition, LidarInfo> lidarInfo;
 	};
 }
 #endif
