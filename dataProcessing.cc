@@ -24,7 +24,7 @@ void dataProcessing::InitLidar(LidarPosition pos, double minAngle, double resolu
 void dataProcessing::UpdateCameraData(int newLanePositionX, int newLanePositionY) {
     lanePositionX = newLanePositionX;
     lanePositionY = newLanePositionY;
-	std::cout << "Update(Camera)\n";	// check for update
+	//std::cout << "Update(Camera)\n";	// check for update
 }
 
 // Update lidar data
@@ -41,15 +41,16 @@ void dataProcessing::UpdateLidarData(LidarPosition pos, std::vector<double>* new
 		default:
 		break;
 	}
-	std::cout << "Update(Lidar)\n";	// check for update
+	//std::cout << "Update(Lidar)\n";	// check for update
 }
 
 void dataProcessing::GetLanePosition() {
-	
+	std::cout << "Get lane position data\n";
 }
 
 // Retrieve lidar data
 std::vector<double>* dataProcessing::GetLidarData(LidarPosition pos) {
+	std::cout << "Get lidar data\n";	
 	switch (pos) {
 		case FRONT:
 			return frontLidarData;
