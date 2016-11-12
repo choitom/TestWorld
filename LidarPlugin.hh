@@ -9,6 +9,8 @@
 #include <gazebo/common/common.hh>
 #include <vector>
 
+#include "dataProcessing.hh"
+
 namespace gazebo
 {
 	class LidarPlugin : public SensorPlugin

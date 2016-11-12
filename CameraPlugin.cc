@@ -19,9 +19,11 @@
 
 #include "CameraPlugin.hh"
 
+#define PI 3.14159265359
 
 using namespace gazebo;
 using namespace cv;
+using namespace std;
 
 // Register this plugin with the simulator
 GZ_REGISTER_SENSOR_PLUGIN(CameraPlugin)
@@ -51,9 +53,9 @@ void CameraPlugin::Load(sensors::SensorPtr _sensor, sdf::ElementPtr /*_sdf*/)
 
 void CameraPlugin::OnUpdate()
 {
-	// get image width, height, and data
-	int width = (int) this->parentSensor->GetImageWidth(0);
-	int height = (int) this->parentSensor->GetImageHeight(0);
+	// get image width, height and data
+	int width = (int)this->parentSensor->GetImageWidth(0);
+	int height = (int)this->parentSensor->GetImageHeight(0);
 	const unsigned char* imageData = this->parentSensor->GetImageData(0);
 
 	// create image matrix
@@ -70,7 +72,7 @@ void CameraPlugin::OnUpdate()
 	threshold(contours,contoursInv,128,255,THRESH_BINARY_INV);
 
 	// Hough transform for line detection
-	float PI = 3.141592;
+	//float PI = 3.141592;
 	std::vector<Vec2f> lines;
 	HoughLines(contours,lines,1,PI/180, 75);
 
@@ -166,5 +168,12 @@ void CameraPlugin::OnUpdate()
 	// camera view display
 	//namedWindow("Camera View", CV_WINDOW_AUTOSIZE);
 	//imshow("Camera View", contoursInv);
+	
+	// update way point data	
+	dataProcessing::UpdateCameraData(0, 0);	
+
+	// camera display
+	// imshow("Contour Inverse", contoursInv);
+	// imshow("Contour", contours);
 	waitKey(4);
 }

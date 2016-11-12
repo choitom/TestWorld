@@ -39,6 +39,8 @@ void LidarPlugin::Load(sensors::SensorPtr _sensor, sdf::ElementPtr /*_sdf*/){
 
     // Make sure the parent sensor is active.
     this->parentSensor->SetActive(true);
+
+	dataProcessing::InitLidar(FRONT, this->parentSensor->AngleMin().Radian(), this->parentSensor->GetAngleResolution(), this->parentSensor->GetRangeMax(), this->parentSensor->GetRayCount());
 }
 
 void LidarPlugin::OnUpdate()
@@ -46,11 +48,14 @@ void LidarPlugin::OnUpdate()
 	// vector that holds distance for each beam
 	std::vector<double>* rays = new std::vector<double>();
 	for (unsigned int i = 0; i < this->parentSensor->GetRayCount(); i++){
-    rays->push_back(this->parentSensor->GetRange(i));				
-  }
+	  	rays->push_back(this->parentSensor->GetRange(i));				
+	}
 	
-	/* For each beam, print out the distance to an object.
-		 If no object detect, prints out 'inf'
+	dataProcessing::UpdateLidarData(FRONT, rays);
+	
+	// For each beam, print out the distance to an object.
+	// If no object detect, prints out 'inf'
+	/*rays = dataProcessing::GetLidarData(FRONT);
 	std:: cout << "\nLidar Info\n";
 	for(auto &i : *rays)
 	{
