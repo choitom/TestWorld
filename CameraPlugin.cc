@@ -64,9 +64,9 @@ void CameraPlugin::OnUpdate()
 
 
 	// use Canny algorithm to apply on the image to get contours. (args: input, output, low threshold, high threshold)
-	Mat contours;
+	Mat contours,cdst;
 	Canny(image,contours,125,350);
-
+	cvtColor(contours, cdst, CV_GRAY2BGR);
 	// invert the image to better show the lines (threshold value below 128 becomes 255)
 	Mat contoursInv;
 	threshold(contours,contoursInv,128,255,THRESH_BINARY_INV);
@@ -88,9 +88,11 @@ void CameraPlugin::OnUpdate()
 	  pt1.y = cvRound(y0 + 1000*(a));
 	  pt2.x = cvRound(x0 - 1000*(-b));
 	  pt2.y = cvRound(y0 - 1000*(a));
-	  //line( cdst, pt1, pt2, Scalar(0,0,255), 3, CV_AA);
+	  line(cdst, pt1, pt2, Scalar(0,0,255), 3, CV_AA); 
 	}
 
+	imshow("source", image);
+	imshow("detected lines", cdst);
 	// while (it!=lines.end()) {
 	// 	float rho= (*it)[0];   // first element is distance rho
 	// 	float theta= (*it)[1]; // second element is angle theta
