@@ -74,32 +74,46 @@ void CameraPlugin::OnUpdate()
 	// Hough transform for line detection
 	//float PI = 3.141592;
 	std::vector<Vec2f> lines;
-	HoughLines(contours,lines,1,PI/180, 75);
+	HoughLines(contoursInv,lines,1,PI/180, 75);
 
 	std::vector<cv::Vec2f>::const_iterator it= lines.begin();
-	while (it!=lines.end()) {
-		float rho= (*it)[0];   // first element is distance rho
-		float theta= (*it)[1]; // second element is angle theta
-		if (theta < PI/4.
-			|| theta > 3.*PI/4.) { // ~vertical line
-				// point of intersection of the line with first row
-				cv::Point pt1(rho/cos(theta),0);
-				// point of intersection of the line with last row
-				cv::Point pt2((rho-result.rows*sin(theta))/
-				cos(theta),result.rows);
-				// draw a white line
-				cv::line( image, pt1, pt2, cv::Scalar(255), 1);
-			} else { // ~horizontal line
-				// point of intersection of the
-				// line with first column
-				cv::Point pt1(0,rho/sin(theta));
-				// point of intersection of the line with last column
-				cv::Point pt2(result.cols,
-					(rho-result.cols*cos(theta))/sin(theta));
-					// draw a white line
-					cv::line(image, pt1, pt2, cv::Scalar(255), 1);
-				}
-				++it; }
+
+	for( size_t i = 0; i < lines.size(); i++ )
+	{
+	  float rho = lines[i][0], theta = lines[i][1];
+	  Point pt1, pt2;
+	  double a = cos(theta), b = sin(theta);
+	  double x0 = a*rho, y0 = b*rho;
+	  pt1.x = cvRound(x0 + 1000*(-b));
+	  pt1.y = cvRound(y0 + 1000*(a));
+	  pt2.x = cvRound(x0 - 1000*(-b));
+	  pt2.y = cvRound(y0 - 1000*(a));
+	  line( cdst, pt1, pt2, Scalar(0,0,255), 3, CV_AA);
+	}
+
+	// while (it!=lines.end()) {
+	// 	float rho= (*it)[0];   // first element is distance rho
+	// 	float theta= (*it)[1]; // second element is angle theta
+	// 	if (theta < PI/4.
+	// 		|| theta > 3.*PI/4.) { // ~vertical line
+	// 			// point of intersection of the line with first row
+	// 			cv::Point pt1(rho/cos(theta),0);
+	// 			// point of intersection of the line with last row
+	// 			cv::Point pt2((rho-result.rows*sin(theta))/
+	// 			cos(theta),result.rows);
+	// 			// draw a white line
+	// 			cv::line( image, pt1, pt2, cv::Scalar(255), 1);
+	// 		} else { // ~horizontal line
+	// 			// point of intersection of the
+	// 			// line with first column
+	// 			cv::Point pt1(0,rho/sin(theta));
+	// 			// point of intersection of the line with last column
+	// 			cv::Point pt2(result.cols,
+	// 				(rho-result.cols*cos(theta))/sin(theta));
+	// 				// draw a white line
+	// 				cv::line(image, pt1, pt2, cv::Scalar(255), 1);
+	// 			}
+	// 			++it; }
 
 	// // Update our steering based on the lane markers
 	// double angle_average = (left_lane_marker[1]+right_lane_marker[1]) /2;
