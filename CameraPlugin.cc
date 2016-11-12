@@ -61,7 +61,7 @@ void CameraPlugin::OnUpdate()
 	// create image matrix
 	Mat image = Mat(height, width, CV_8UC3, const_cast<unsigned char*>(imageData));
 	Mat imageBirdsEye = Mat(height, width, CV_8UC3, const_cast<unsigned char*>(imageData));
-	
+
 
 	// use Canny algorithm to apply on the image to get contours. (args: input, output, low threshold, high threshold)
 	Mat contours;
@@ -76,6 +76,31 @@ void CameraPlugin::OnUpdate()
 	std::vector<Vec2f> lines;
 	HoughLines(contours,lines,1,PI/180, 75);
 
+	std::vector<cv::Vec2f>::const_iterator it= lines.begin();
+	while (it!=lines.end()) {
+		float rho= (*it)[0];   // first element is distance rho
+		float theta= (*it)[1]; // second element is angle theta
+		if (theta < PI/4.
+			|| theta > 3.*PI/4.) { // ~vertical line
+				// point of intersection of the line with first row
+				cv::Point pt1(rho/cos(theta),0);
+				// point of intersection of the line with last row
+				cv::Point pt2((rho-result.rows*sin(theta))/
+				cos(theta),result.rows);
+				// draw a white line
+				cv::line( image, pt1, pt2, cv::Scalar(255), 1);
+			} else { // ~horizontal line
+				// point of intersection of the
+				// line with first column
+				cv::Point pt1(0,rho/sin(theta));
+				// point of intersection of the line with last column
+				cv::Point pt2(result.cols,
+					(rho-result.cols*cos(theta))/sin(theta));
+					// draw a white line
+					cv::line(image, pt1, pt2, cv::Scalar(255), 1);
+				}
+				++it; }
+
 	// // Update our steering based on the lane markers
 	// double angle_average = (left_lane_marker[1]+right_lane_marker[1]) /2;
 	// double newSteeringAmount = -20*PI*(fabs(angle_average - PI/2))+50;
@@ -86,7 +111,7 @@ void CameraPlugin::OnUpdate()
 
 	//find actual points based on hough lines? for now these are hardcoded
     vector<Point> trapezoid_view_points;
-    trapezoid_view_points.push_back(Point((width-1)/3, (height-1)/2)); 
+    trapezoid_view_points.push_back(Point((width-1)/3, (height-1)/2));
     trapezoid_view_points.push_back(Point(((width-1)/3)*2, (height-1)/2));
     trapezoid_view_points.push_back(Point(width-1, ((height-1)/3)*2));
     trapezoid_view_points.push_back(Point(0, ((height-1)/3)*2));
@@ -115,7 +140,7 @@ void CameraPlugin::OnUpdate()
 
     Point2f dst_vertices[3];
     dst_vertices[0] = Point(0, 0);
-    dst_vertices[1] = Point(box.boundingRect().width-1, 0); 
+    dst_vertices[1] = Point(box.boundingRect().width-1, 0);
     dst_vertices[2] = Point(0, box.boundingRect().height-1);
 
    /* Mat warpMatrix = getPerspectiveTransform(src_vertices, dst_vertices);
@@ -144,7 +169,7 @@ void CameraPlugin::OnUpdate()
 
 	SurfFeatureDetector detector( minHessian );
 
-	//TODO: iterate through vector, make vector of limited number of points per y window 
+	//TODO: iterate through vector, make vector of limited number of points per y window
 	// (get using average)
 
 	std::vector<KeyPoint> keypoints_1; //, keypoints_2;
@@ -156,7 +181,7 @@ void CameraPlugin::OnUpdate()
 	// 	printf("keypoint x: %i \n", keypoints_1._pt.x);
 
 	// 	printf("keypoint y: %i \n", keypoints_1._pt.y);
-	// 	//for 
+	// 	//for
 	// }
 
 
@@ -165,7 +190,7 @@ void CameraPlugin::OnUpdate()
 	//detector.detect( img_2, keypoints_2 );
 
 	//-- Draw keypoints
-	Mat img_keypoints_1; 
+	Mat img_keypoints_1;
 	//Mat img_keypoints_2;
 
 	drawKeypoints( rotated, keypoints_1, img_keypoints_1, Scalar::all(-1), DrawMatchesFlags::DEFAULT );
@@ -183,9 +208,9 @@ void CameraPlugin::OnUpdate()
 	// camera view display
 	//namedWindow("Camera View", CV_WINDOW_AUTOSIZE);
 	//imshow("Camera View", contoursInv);
-	
-	// update way point data	
-	dataProcessing::UpdateCameraData(0, 0);	
+
+	// update way point data
+	dataProcessing::UpdateCameraData(0, 0);
 
 	// camera display
 	// imshow("Contour Inverse", contoursInv);
