@@ -88,7 +88,7 @@ void CameraPlugin::OnUpdate()
 	  pt1.y = cvRound(y0 + 1000*(a));
 	  pt2.x = cvRound(x0 - 1000*(-b));
 	  pt2.y = cvRound(y0 - 1000*(a));
-	  line( cdst, pt1, pt2, Scalar(0,0,255), 3, CV_AA);
+	  //line( cdst, pt1, pt2, Scalar(0,0,255), 3, CV_AA);
 	}
 
 	// while (it!=lines.end()) {
@@ -140,7 +140,7 @@ void CameraPlugin::OnUpdate()
 
     // Assemble a rotated rectangle out of that info
     RotatedRect box = minAreaRect(cv::Mat(trapezoid_view_points));
-    std::cout << "Rotated box set to (" << box.boundingRect().x << "," << box.boundingRect().y << ") " << box.size.width << "x" << box.size.height << std::endl;
+    // std::cout << "Rotated box set to (" << box.boundingRect().x << "," << box.boundingRect().y << ") " << box.size.width << "x" << box.size.height << std::endl;
 
     Point2f pts[4];
 
@@ -188,10 +188,9 @@ void CameraPlugin::OnUpdate()
 
 	std::vector<KeyPoint> keypoints_1; //, keypoints_2;
 
-	int waypointChunks = 6; // number of waypoints
+	int numChunks = 6; // number of waypoints
 	std::vector<KeyPoint> waypointPoints;
 
-	// std::cout << "Keypoint x and y: (" << keypoints_1[0].pt << "," << keypoints_1[0].pt << ") " << std::endl;// << box.size.width << "x" << box.size.height << std::endl;
 
 	// 	printf("keypoint y: %i \n", keypoints_1._pt.y);
 	//for (int i = 0; i < waypointChunks; i++) {
@@ -202,11 +201,31 @@ void CameraPlugin::OnUpdate()
 		//for 
 	//}
 
-
-
 	detector.detect( contoursInv, keypoints_1 );
 	//detector.detect( img_2, keypoints_2 );
 
+	std::cout<< "Keypoint vector length: " << keypoints_1.size() << std::endl;
+	if (keypoints_1.size() > 0) {
+		std::cout << "Keypoint x and y: (" << keypoints_1[0].pt.x << "," << keypoints_1[0].pt.y << ") " << std::endl;
+
+		for (int i = 1; i <= numChunks; i++) { 
+			float xSum = 0;
+			float ySum = 0;
+			float curMin = i*(height/numChunks);
+			float curMax = curMin + height/numChunks;
+			int count = 0;
+			for (int j = 0; j < keypoints_1.size(); j++) {
+				if (keypoints_1[j].pt.y <= curMin && keypoints_1[j].pt.y <= curMax) {
+					xSum += keypoints_1[j].pt.x;
+					ySum += keypoints_1[j].pt.y;
+					count++;
+				}
+			}
+			cv::Point2f newWaypoint(xSum/count, ySum/count);
+			std::cout << "New waypoint: " << newWaypoint.x << ", " << newWaypoint.y << std::endl;
+
+		}
+	}
 	//-- Draw keypoints
 	Mat img_keypoints_1;
 	//Mat img_keypoints_2;
