@@ -101,7 +101,7 @@ void CameraPlugin::OnUpdate()
 
     // Assemble a rotated rectangle out of that info
     RotatedRect box = minAreaRect(cv::Mat(trapezoid_view_points));
-    //std::cout << "Rotated box set to (" << box.boundingRect().x << "," << box.boundingRect().y << ") " << box.size.width << "x" << box.size.height << std::endl;
+    std::cout << "Rotated box set to (" << box.boundingRect().x << "," << box.boundingRect().y << ") " << box.size.width << "x" << box.size.height << std::endl;
 
     Point2f pts[4];
 
@@ -140,7 +140,7 @@ void CameraPlugin::OnUpdate()
 	/////////// feature detection /////////////////////
     ////// from http://docs.opencv.org/2.4/doc/tutorials/features2d/feature_detection/feature_detection.html  ///////////
 
-	int minHessian = 400;
+	int minHessian = 1200;
 
 	SurfFeatureDetector detector( minHessian );
 
@@ -152,23 +152,27 @@ void CameraPlugin::OnUpdate()
 	int waypointChunks = 6; // number of waypoints
 	std::vector<KeyPoint> waypointPoints;
 
-	// for (int i = 0; i < waypointChunks; i++) {
-	// 	printf("keypoint x: %i \n", keypoints_1._pt.x);
-
-	// 	printf("keypoint y: %i \n", keypoints_1._pt.y);
-	// 	//for 
-	// }
+	// std::cout << "Keypoint x and y: (" << keypoints_1[0].pt << "," << keypoints_1[0].pt << ") " << std::endl;// << box.size.width << "x" << box.size.height << std::endl;
 
 
+	//for (int i = 0; i < waypointChunks; i++) {
+		//std::cout << "Keypoint x and y: (" << keypoints_1[i].pt.x << "," << keypoints_1[i].pt.y << ") " << std:: endl;// << box.size.width << "x" << box.size.height << std::endl;
+		// printf("keypoint x: %f \n", keypoints_1[i].pt.x);
 
-	detector.detect( rotated, keypoints_1 );
+		// printf("keypoint y: %f \n", keypoints_1[i].pt.y);
+		//for 
+	//}
+
+
+
+	detector.detect( contoursInv, keypoints_1 );
 	//detector.detect( img_2, keypoints_2 );
 
 	//-- Draw keypoints
 	Mat img_keypoints_1; 
 	//Mat img_keypoints_2;
 
-	drawKeypoints( rotated, keypoints_1, img_keypoints_1, Scalar::all(-1), DrawMatchesFlags::DEFAULT );
+	drawKeypoints( contoursInv, keypoints_1, img_keypoints_1, Scalar::all(-1), DrawMatchesFlags::DEFAULT );
 	//drawKeypoints( img_2, keypoints_2, img_keypoints_2, Scalar::all(-1), DrawMatchesFlags::DEFAULT );
 
 	//-- Show detected (drawn) keypoints
