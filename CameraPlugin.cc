@@ -101,7 +101,7 @@ void CameraPlugin::OnUpdate()
 
     // Assemble a rotated rectangle out of that info
     RotatedRect box = minAreaRect(cv::Mat(trapezoid_view_points));
-    std::cout << "Rotated box set to (" << box.boundingRect().x << "," << box.boundingRect().y << ") " << box.size.width << "x" << box.size.height << std::endl;
+    //std::cout << "Rotated box set to (" << box.boundingRect().x << "," << box.boundingRect().y << ") " << box.size.width << "x" << box.size.height << std::endl;
 
     Point2f pts[4];
 
@@ -144,7 +144,22 @@ void CameraPlugin::OnUpdate()
 
 	SurfFeatureDetector detector( minHessian );
 
-	std::vector<KeyPoint> keypoints_1, keypoints_2;
+	//TODO: iterate through vector, make vector of limited number of points per y window 
+	// (get using average)
+
+	std::vector<KeyPoint> keypoints_1; //, keypoints_2;
+
+	int waypointChunks = 6; // number of waypoints
+	std::vector<KeyPoint> waypointPoints;
+
+	// for (int i = 0; i < waypointChunks; i++) {
+	// 	printf("keypoint x: %i \n", keypoints_1._pt.x);
+
+	// 	printf("keypoint y: %i \n", keypoints_1._pt.y);
+	// 	//for 
+	// }
+
+
 
 	detector.detect( rotated, keypoints_1 );
 	//detector.detect( img_2, keypoints_2 );
