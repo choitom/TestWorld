@@ -27,5 +27,5 @@ void CarPlugin::OnUpdate(const common::UpdateInfo & /*_info*/) {
 	//std::vector<double>* frontLidar = dataProcessing::GetLidarData(FRONT);
 
 	// apply small linear velocity for testing
-	//this->model->SetLinearVel(math::Vector3(3,0,0));
+	this->model->SetLinearVel(math::Vector3(3,0,0));
 }
