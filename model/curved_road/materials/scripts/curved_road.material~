@@ -1,4 +1,4 @@
-material comps_road
+material curved_road
 {
 	receive_shadows off
 	technique

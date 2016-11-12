@@ -13,9 +13,327 @@
       </attenuation>
       <direction>-0.5 0.1 -0.9</direction>
     </light>
-	<include>
-		<uri>/model/test_model</uri>
-	</include>
+    <model name='test_model'>
+      <plugin name='test_plugin' filename='build/libCarPlugin.so'/>
+      <link name='box_link'>
+        <pose frame=''>0 0 0.4 0 -0 0</pose>
+        <visual name='visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>1 1 1</size>
+            </box>
+          </geometry>
+          <material>
+            <lighting>1</lighting>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Grey</name>
+            </script>
+            <ambient>0.3 0.3 0.3 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
+            <specular>0.01 0.01 0.01 1</specular>
+            <emissive>0 0 0 1</emissive>
+            <shader type='pixel'/>
+          </material>
+          <cast_shadows>1</cast_shadows>
+          <transparency>0</transparency>
+        </visual>
+        <collision name='box_collision'>
+          <laser_retro>0</laser_retro>
+          <max_contacts>10</max_contacts>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>1 1 1</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1</mu>
+                <mu2>1</mu2>
+                <fdir1>0 0 0</fdir1>
+                <slip1>0</slip1>
+                <slip2>0</slip2>
+              </ode>
+            </friction>
+            <bounce>
+              <restitution_coefficient>0</restitution_coefficient>
+              <threshold>1e+06</threshold>
+            </bounce>
+            <contact>
+              <collide_without_contact>0</collide_without_contact>
+              <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
+              <collide_bitmask>1</collide_bitmask>
+              <ode>
+                <soft_cfm>0</soft_cfm>
+                <soft_erp>0.2</soft_erp>
+                <kp>1e+13</kp>
+                <kd>1</kd>
+                <max_vel>0.01</max_vel>
+                <min_depth>0</min_depth>
+              </ode>
+              <bullet>
+                <split_impulse>1</split_impulse>
+                <split_impulse_penetration_threshold>-0.01</split_impulse_penetration_threshold>
+                <soft_cfm>0</soft_cfm>
+                <soft_erp>0.2</soft_erp>
+                <kp>1e+13</kp>
+                <kd>1</kd>
+              </bullet>
+            </contact>
+          </surface>
+        </collision>
+        <self_collide>0</self_collide>
+        <inertial>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+          <mass>1</mass>
+        </inertial>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <link name='lidar'>
+        <sensor name='lidar' type='ray'>
+          <plugin name='lidar_plugin' filename='build/liblidar.so'/>
+          <pose frame=''>0.5 0 0.3 0 -0 0</pose>
+          <ray>
+            <scan>
+              <horizontal>
+                <samples>640</samples>
+                <resolution>1</resolution>
+                <min_angle>-1</min_angle>
+                <max_angle>1</max_angle>
+              </horizontal>
+            </scan>
+            <range>
+              <min>0.8</min>
+              <max>15</max>
+              <resolution>0.01</resolution>
+            </range>
+            <noise>
+              <type>gaussian</type>
+              <mean>0</mean>
+              <stddev>0.01</stddev>
+            </noise>
+          </ray>
+          <always_on>1</always_on>
+          <update_rate>30</update_rate>
+          <visualize>1</visualize>
+        </sensor>
+        <visual name='lidar_visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <uri>model://hokuyo/meshes/hokuyo.dae</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <lighting>1</lighting>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Grey</name>
+            </script>
+            <ambient>0.3 0.3 0.3 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
+            <specular>0.01 0.01 0.01 1</specular>
+            <emissive>0 0 0 1</emissive>
+            <shader type='vertex'>
+              <normal_map>__default__</normal_map>
+            </shader>
+          </material>
+          <cast_shadows>1</cast_shadows>
+          <transparency>0</transparency>
+        </visual>
+        <collision name='lidar_collision'>
+          <laser_retro>0</laser_retro>
+          <max_contacts>10</max_contacts>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <uri>model://hokuyo/meshes/hokuyo.dae</uri>
+            </mesh>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1</mu>
+                <mu2>1</mu2>
+                <fdir1>0 0 0</fdir1>
+                <slip1>0</slip1>
+                <slip2>0</slip2>
+              </ode>
+            </friction>
+            <bounce>
+              <restitution_coefficient>0</restitution_coefficient>
+              <threshold>1e+06</threshold>
+            </bounce>
+            <contact>
+              <collide_without_contact>0</collide_without_contact>
+              <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
+              <collide_bitmask>1</collide_bitmask>
+              <ode>
+                <soft_cfm>0</soft_cfm>
+                <soft_erp>0.2</soft_erp>
+                <kp>1e+13</kp>
+                <kd>1</kd>
+                <max_vel>0.01</max_vel>
+                <min_depth>0</min_depth>
+              </ode>
+              <bullet>
+                <split_impulse>1</split_impulse>
+                <split_impulse_penetration_threshold>-0.01</split_impulse_penetration_threshold>
+                <soft_cfm>0</soft_cfm>
+                <soft_erp>0.2</soft_erp>
+                <kp>1e+13</kp>
+                <kd>1</kd>
+              </bullet>
+            </contact>
+          </surface>
+        </collision>
+        <self_collide>0</self_collide>
+        <inertial>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+          <mass>1</mass>
+        </inertial>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <link name='camera_link'>
+        <pose frame=''>0.5 0 0.5 0 -0 0</pose>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <sensor name='camera' type='multicamera'>
+          <always_on>1</always_on>
+          <update_rate>24</update_rate>
+          <visualize>0</visualize>
+          <topic>sdcCar_camera</topic>
+          <camera name='center'>
+            <pose frame=''>0 0 0 0 -0 0</pose>
+            <horizontal_fov>1.39626</horizontal_fov>
+            <image>
+              <width>640</width>
+              <height>480</height>
+            </image>
+            <clip>
+              <near>0.1</near>
+              <far>100</far>
+            </clip>
+            <save enabled='0'>
+              <path>__default__</path>
+            </save>
+          </camera>
+          <plugin name='camera_plugin' filename='build/libcamera.so'/>
+        </sensor>
+        <visual name='visual'>
+          <geometry>
+            <box>
+              <size>0.05 0.05 0.05</size>
+            </box>
+          </geometry>
+          <material>
+            <shader type='pixel'/>
+          </material>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <cast_shadows>1</cast_shadows>
+          <transparency>0</transparency>
+        </visual>
+        <inertial>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+          <mass>1</mass>
+        </inertial>
+        <gravity>1</gravity>
+      </link>
+      <joint name='camera' type='revolute'>
+        <parent>box_link</parent>
+        <child>camera_link</child>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <use_parent_model_frame>0</use_parent_model_frame>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>-1</effort>
+            <velocity>-1</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+            <damping>0</damping>
+            <friction>0</friction>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+        <physics>
+          <ode>
+            <limit>
+              <cfm>0</cfm>
+              <erp>0.2</erp>
+            </limit>
+            <suspension>
+              <cfm>0</cfm>
+              <erp>0.2</erp>
+            </suspension>
+          </ode>
+        </physics>
+      </joint>
+      <joint name='link_1_JOINT_0' type='revolute'>
+        <parent>box_link</parent>
+        <child>lidar</child>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <use_parent_model_frame>0</use_parent_model_frame>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>-1</effort>
+            <velocity>-1</velocity>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+            <damping>0</damping>
+          </dynamics>
+          <use_parent_model_frame>1</use_parent_model_frame>
+        </axis>
+        <physics>
+          <ode>
+            <limit>
+              <cfm>0</cfm>
+              <erp>0.2</erp>
+            </limit>
+            <suspension>
+              <cfm>0</cfm>
+              <erp>0.2</erp>
+            </suspension>
+          </ode>
+        </physics>
+      </joint>
+      <static>0</static>
+      <allow_auto_disable>1</allow_auto_disable>
+    </model>
     <model name='ground_plane'>
       <static>1</static>
       <link name='link'>
@@ -120,16 +438,24 @@
       </link>
       <pose frame=''>-2 1 0 0 -0 0</pose>
     </model>
-    
     <state world_name='default'>
-      <sim_time>382 240000000</sim_time>
-      <real_time>397 256080242</real_time>
-      <wall_time>1477963050 538340031</wall_time>
-      <iterations>382240</iterations>
+      <sim_time>436 313000000</sim_time>
+      <real_time>58 846242129</real_time>
+      <wall_time>1478989582 834404801</wall_time>
+      <iterations>54073</iterations>
       <model name='comps_road'>
         <pose frame=''>-2 1 0 0 -0 0</pose>
         <link name='link'>
           <pose frame=''>-2 1 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='curved_road'>
+        <pose frame=''>4 -11.4986 0 0 -0 0</pose>
+        <link name='link'>
+          <pose frame=''>4 -11.4986 0 0 -0 0</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
@@ -145,33 +471,74 @@
         </link>
       </model>
       <model name='test_model'>
-        <pose frame=''>-5.99922 3.00009 0.15 -1e-06 -0 -0.000263</pose>
+        <pose frame=''>-1.83776 -10.5427 0.100001 1e-06 -0 -0.00047</pose>
         <link name='box_link'>
-          <pose frame=''>-5.99922 3.00009 0.55 -1e-06 -0 -0.000263</pose>
-          <velocity>0.000422 -0.000902 0.001937 0.001805 0.000839 4e-06</velocity>
-          <acceleration>0.800113 -2.90871 4.31924 2.58592 1.45499 -3.04614</acceleration>
-          <wrench>0.800113 -2.90871 4.31924 0 -0 0</wrench>
+          <pose frame=''>-1.83776 -10.5427 0.500001 1e-06 -0 -0.00047</pose>
+          <velocity>0.000642 0.001085 0.002782 -0.002172 0.001276 -6e-06</velocity>
+          <acceleration>1.23428 3.10386 5.38932 -2.96752 0.580073 3.03498</acceleration>
+          <wrench>1.23428 3.10386 5.38932 0 -0 0</wrench>
         </link>
         <link name='camera_link'>
-          <pose frame=''>-5.49922 2.99995 0.65 -1e-06 -0 -0.000263</pose>
-          <velocity>0.000502 -0.001068 0.001517 0.001806 0.000841 2.4e-05</velocity>
-          <acceleration>0.970529 -3.42199 3.47586 2.58962 1.45586 -3.03821</acceleration>
-          <wrench>0.970529 -3.42199 3.47586 0 -0 0</wrench>
+          <pose frame=''>-1.33776 -10.5429 0.600001 1e-06 -0 -0.00047</pose>
+          <velocity>0.000766 0.001289 0.002144 -0.002173 0.001278 -2.5e-05</velocity>
+          <acceleration>1.49367 3.64484 4.11108 -2.972 0.581659 3.0211</acceleration>
+          <wrench>1.49367 3.64484 4.11108 0 -0 0</wrench>
         </link>
         <link name='lidar'>
-          <pose frame=''>-5.99922 3.00009 0.15 -1e-06 -0 -0.000263</pose>
-          <velocity>8.1e-05 -0.000176 0.001937 0.001806 0.000841 2.5e-05</velocity>
-          <acceleration>0.127499 -0.606617 4.31963 2.59038 1.45568 -3.03781</acceleration>
-          <wrench>0.127499 -0.606617 4.31963 0 -0 0</wrench>
+          <pose frame=''>-1.83775 -10.5427 0.100001 1e-06 -0 -0.00047</pose>
+          <velocity>0.000127 0.000213 0.002782 -0.002173 0.001278 -2.6e-05</velocity>
+          <acceleration>0.213645 0.646847 5.38979 -2.97288 0.581486 3.0204</acceleration>
+          <wrench>0.213645 0.646847 5.38979 0 -0 0</wrench>
         </link>
       </model>
     </state>
     <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose frame=''>22.2723 -18.2277 8.04182 0 0.275643 2.35619</pose>
+        <pose frame=''>33.6564 -28.4762 14.0121 0 0.275643 2.35619</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
       </camera>
     </gui>
+    <model name='curved_road'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <box>
+              <size>10 10 0.05</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <cast_shadows>0</cast_shadows>
+          <geometry>
+            <box>
+              <size>10 10 0.05</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>model://curved_road/materials/scripts</uri>
+              <uri>model://curved_road/materials/textures</uri>
+              <name>curved_road</name>
+            </script>
+          </material>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <pose frame=''>4 -11.4986 0 0 -0 0</pose>
+    </model>
   </world>
 </sdf>

@@ -1,4 +1,4 @@
-material comps_road
+material curved_road
 {
 	receive_shadows off
 	technique
@@ -8,7 +8,7 @@ material comps_road
 			texture_unit
 			{
 				texture curve.png
-				scale 1 .1
+				scale 1 1
 			}
 		}
 	}

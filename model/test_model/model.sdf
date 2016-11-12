@@ -189,7 +189,7 @@
 				<topic>sdcCar_camera</topic>
 				<camera name='center'>
 					<pose>0 0 0 0 0 0</pose>
-					<horizontal_fov>1.3962634</horizontal_fov>
+					<horizontal_fov>1</horizontal_fov>
 					<image>
 						<width>640</width>
 						<height>480</height>
