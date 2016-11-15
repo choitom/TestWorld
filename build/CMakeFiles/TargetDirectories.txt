@@ -1,7 +1,0 @@
-/Users/baker/Git/TestWorld/build/CMakeFiles/lidar.dir
-/Users/baker/Git/TestWorld/build/CMakeFiles/CarPlugin.dir
-/Users/baker/Git/TestWorld/build/CMakeFiles/rebuild_cache.dir
-/Users/baker/Git/TestWorld/build/CMakeFiles/camera.dir
-/Users/baker/Git/TestWorld/build/CMakeFiles/data.dir
-/Users/baker/Git/TestWorld/build/CMakeFiles/edit_cache.dir
-/Users/baker/Git/TestWorld/build/CMakeFiles/LidarInfo.dir
