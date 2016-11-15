@@ -77,45 +77,50 @@ void CameraPlugin::OnUpdate()
 	HoughLines(contoursInv,lines,1,PI/180, 75);
 
 	std::vector<cv::Vec2f>::const_iterator it= lines.begin();
+	double leftEdgeAngle = 0;
+	double rightEdgeAngle = 0;
 
-	for( size_t i = 0; i < lines.size(); i++ )
-	{
-	  float rho = lines[i][0], theta = lines[i][1];
-	  Point pt1, pt2;
-	  double a = cos(theta), b = sin(theta);
-	  double x0 = a*rho, y0 = b*rho;
-	  pt1.x = cvRound(x0 + 1000*(-b));
-	  pt1.y = cvRound(y0 + 1000*(a));
-	  pt2.x = cvRound(x0 - 1000*(-b));
-	  pt2.y = cvRound(y0 - 1000*(a));
-	  line(cdst, pt1, pt2, Scalar(0,0,255), 3, CV_AA); 
-	}
+	// The part of straight lane detection
+	while (it!=lines.end()) {
+    double currentAngle = (*it)[1];
 
-	imshow("source", image);
-	imshow("detected lines", cdst);
-	// while (it!=lines.end()) {
-	// 	float rho= (*it)[0];   // first element is distance rho
-	// 	float theta= (*it)[1]; // second element is angle theta
-	// 	if (theta < PI/4.
-	// 		|| theta > 3.*PI/4.) { // ~vertical line
-	// 			// point of intersection of the line with first row
-	// 			cv::Point pt1(rho/cos(theta),0);
-	// 			// point of intersection of the line with last row
-	// 			cv::Point pt2((rho-result.rows*sin(theta))/
-	// 			cos(theta),result.rows);
-	// 			// draw a white line
-	// 			cv::line( image, pt1, pt2, cv::Scalar(255), 1);
-	// 		} else { // ~horizontal line
-	// 			// point of intersection of the
-	// 			// line with first column
-	// 			cv::Point pt1(0,rho/sin(theta));
-	// 			// point of intersection of the line with last column
-	// 			cv::Point pt2(result.cols,
-	// 				(rho-result.cols*cos(theta))/sin(theta));
-	// 				// draw a white line
-	// 				cv::line(image, pt1, pt2, cv::Scalar(255), 1);
-	// 			}
-	// 			++it; }
+    // horizontal lines are 90 degrees and vertical lines are 0 degrees.
+    if (0 < currentAngle <= (PI/2) && currentAngle < leftEdgeAngle) {
+      leftEdgeAngle = currentAngle;
+    } else if (PI/2 <= currentAngle < PI && currentAngle > rightEdgeAngle) {
+      rightEdgeAngle = currentAngle;
+    }
+    ++it;
+  }
+
+  // Turning angle would be the average angels of left edge and right egde
+	double turningAngle = (leftEdgeAngle+rightEdgeAngle)/2;
+
+	//imshow("source", image);
+	//imshow("detected lines", cdst);
+	while (it!=lines.end()) {
+		float rho= (*it)[0];   // first element is distance rho
+		float theta= (*it)[1]; // second element is angle theta
+		if (theta < PI/4.
+			|| theta > 3.*PI/4.) { // ~vertical line
+				// point of intersection of the line with first row
+				cv::Point pt1(rho/cos(theta),0);
+				// point of intersection of the line with last row
+				cv::Point pt2((rho-image.rows*sin(theta))/
+				cos(theta),image.rows);
+				// draw a white line
+				cv::line( image, pt1, pt2, cv::Scalar(255), 1);
+			} else { // ~horizontal line
+				// point of intersection of the
+				// line with first column
+				cv::Point pt1(0,rho/sin(theta));
+				// point of intersection of the line with last column
+				cv::Point pt2(image.cols,
+					(rho-image.cols*cos(theta))/sin(theta));
+					// draw a white line
+					cv::line(image, pt1, pt2, cv::Scalar(255), 1);
+				}
+				++it; }
 
 	// // Update our steering based on the lane markers
 	// double angle_average = (left_lane_marker[1]+right_lane_marker[1]) /2;
@@ -200,7 +205,7 @@ void CameraPlugin::OnUpdate()
 		// printf("keypoint x: %f \n", keypoints_1[i].pt.x);
 
 		// printf("keypoint y: %f \n", keypoints_1[i].pt.y);
-		//for 
+		//for
 	//}
 
 	detector.detect( contoursInv, keypoints_1 );
@@ -210,7 +215,7 @@ void CameraPlugin::OnUpdate()
 	if (keypoints_1.size() > 0) {
 		std::cout << "Keypoint x and y: (" << keypoints_1[0].pt.x << "," << keypoints_1[0].pt.y << ") " << std::endl;
 
-		for (int i = 1; i <= numChunks; i++) { 
+		for (int i = 1; i <= numChunks; i++) {
 			float xSum = 0;
 			float ySum = 0;
 			float curMin = i*(height/numChunks);
