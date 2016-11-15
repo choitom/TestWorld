@@ -439,10 +439,10 @@
       <pose frame=''>-2 1 0 0 -0 0</pose>
     </model>
     <state world_name='default'>
-      <sim_time>484 551000000</sim_time>
-      <real_time>54 99746644</real_time>
-      <wall_time>1479228565 922728502</wall_time>
-      <iterations>48238</iterations>
+      <sim_time>958 959000000</sim_time>
+      <real_time>98 12353000</real_time>
+      <wall_time>1479236192 973474000</wall_time>
+      <iterations>84823</iterations>
       <model name='comps_road'>
         <pose frame=''>-2 1 0 0 -0 0</pose>
         <link name='link'>
@@ -452,10 +452,19 @@
           <wrench>0 0 0 0 -0 0</wrench>
         </link>
       </model>
-      <model name='curved_road_2'>
-        <pose frame=''>47 -2 0 0 -0 0</pose>
+      <model name='comps_road_0_0'>
+        <pose frame=''>90.9327 -18.4691 0 0 0 -0.417778</pose>
         <link name='link'>
-          <pose frame=''>47 -2 0 0 -0 0</pose>
+          <pose frame=''>90.9327 -18.4691 0 0 0 -0.417778</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='curved_road_2'>
+        <pose frame=''>47 -1.82211 0 0 -0 0</pose>
+        <link name='link'>
+          <pose frame=''>47 -1.82211 0 0 -0 0</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
@@ -471,82 +480,41 @@
         </link>
       </model>
       <model name='test_model'>
-        <pose frame=''>44.2609 -1.02477 0.099999 2e-06 -1e-06 -0.000478</pose>
+        <pose frame=''>34.9085 -1.21494 0.15 1e-06 -0 -0.002851</pose>
         <link name='box_link'>
-          <pose frame=''>44.2609 -1.02477 0.499999 2e-06 -1e-06 -0.000478</pose>
-          <velocity>-0.000444 -0.001926 -0.002364 0.003751 -0.00099 0.000102</velocity>
-          <acceleration>-0.558857 -0.965094 -5.55191 1.82414 -1.18746 0.073848</acceleration>
-          <wrench>-0.558857 -0.965094 -5.55191 0 -0 0</wrench>
+          <pose frame=''>34.9085 -1.21494 0.55 1e-06 -0 -0.002851</pose>
+          <velocity>0.000499 0.00099 0.002448 -0.001983 0.000981 -1.5e-05</velocity>
+          <acceleration>0.950562 3.01921 4.92258 -2.81563 1.17421 3.04216</acceleration>
+          <wrench>0.950562 3.01921 4.92258 0 -0 0</wrench>
         </link>
         <link name='camera_link'>
-          <pose frame=''>44.7609 -1.02501 0.599999 2e-06 -1e-06 -0.000478</pose>
-          <velocity>-0.000551 -0.002253 -0.001872 0.003753 -0.000987 8.8e-05</velocity>
-          <acceleration>-0.703972 -1.14343 -4.96484 1.82354 -1.17525 0.008895</acceleration>
-          <wrench>-0.703972 -1.14343 -4.96484 0 -0 0</wrench>
+          <pose frame=''>35.4085 -1.21637 0.65 1e-06 -0 -0.002851</pose>
+          <velocity>0.000603 0.001161 0.001962 -0.001985 0.000978 -5.1e-05</velocity>
+          <acceleration>1.15839 3.53765 3.95022 -2.82098 1.17954 3.00974</acceleration>
+          <wrench>1.15839 3.53765 3.95022 0 -0 0</wrench>
         </link>
         <link name='lidar'>
-          <pose frame=''>44.2609 -1.02477 0.099999 2e-06 -1e-06 -0.000478</pose>
-          <velocity>-5.8e-05 -0.000419 -0.002365 0.003754 -0.000987 8.7e-05</velocity>
-          <acceleration>-0.117965 -0.237015 -5.55202 1.82358 -1.1749 0.005876</acceleration>
-          <wrench>-0.117965 -0.237015 -5.55202 0 -0 0</wrench>
+          <pose frame=''>34.9085 -1.21494 0.15 1e-06 -0 -0.002851</pose>
+          <velocity>0.000114 0.00019 0.002448 -0.001985 0.000978 -5.2e-05</velocity>
+          <acceleration>0.177979 0.620239 4.92281 -2.82205 1.17954 3.00814</acceleration>
+          <wrench>0.177979 0.620239 4.92281 0 -0 0</wrench>
         </link>
       </model>
     </state>
     <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose frame=''>71.7469 -43.7775 19.7936 0 0.275643 2.35619</pose>
+        <pose frame=''>37.3534 2.20973 54.2901 -0.784163 1.57075 2.3574</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
       </camera>
     </gui>
-    <model name='curved_road'>
-      <static>1</static>
-      <link name='link'>
-        <collision name='collision'>
-          <geometry>
-            <box>
-              <size>10 10 0.05</size>
-            </box>
-          </geometry>
-          <max_contacts>10</max_contacts>
-          <surface>
-            <contact>
-              <ode/>
-            </contact>
-            <bounce/>
-            <friction>
-              <ode/>
-            </friction>
-          </surface>
-        </collision>
-        <visual name='visual'>
-          <cast_shadows>0</cast_shadows>
-          <geometry>
-            <box>
-              <size>10 10 0.05</size>
-            </box>
-          </geometry>
-          <material>
-            <script>
-              <uri>model://curved_road/materials/scripts</uri>
-              <uri>model://curved_road/materials/textures</uri>
-              <name>curved_road</name>
-            </script>
-          </material>
-        </visual>
-        <self_collide>0</self_collide>
-        <kinematic>0</kinematic>
-        <gravity>1</gravity>
-      </link>
-      <pose frame=''>4 -11.4986 0 0 -0 0</pose>
-    </model>
     <model name='curved_road_2'>
       <static>1</static>
       <link name='link'>
         <collision name='collision'>
           <geometry>
             <box>
-              <size>10 15.5 0.05</size>
+              <size>10 15.5 0.005</size>
             </box>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -564,7 +532,7 @@
           <cast_shadows>0</cast_shadows>
           <geometry>
             <box>
-              <size>10 15.5 0.05</size>
+              <size>10 15.5 0.005</size>
             </box>
           </geometry>
           <material>
@@ -580,6 +548,50 @@
         <gravity>1</gravity>
       </link>
       <pose frame=''>-4 11.4986 0 0 -0 0</pose>
+    </model>
+    <audio>
+      <device>default</device>
+    </audio>
+    <model name='comps_road_0_0'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <box>
+              <size>90 10 0.05</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <cast_shadows>0</cast_shadows>
+          <geometry>
+            <box>
+              <size>90 10 0.05</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>model://comps_road/materials/scripts</uri>
+              <uri>model://comps_road/materials/textures</uri>
+              <name>comps_road</name>
+            </script>
+          </material>
+        </visual>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <gravity>1</gravity>
+      </link>
+      <pose frame=''>70.5002 -15.5316 0 0 -0 0</pose>
     </model>
   </world>
 </sdf>

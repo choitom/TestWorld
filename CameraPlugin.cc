@@ -192,39 +192,64 @@ void CameraPlugin::OnUpdate()
 	std::vector<KeyPoint> keypoints_1; //, keypoints_2;
 
 	int numChunks = 3; // number of waypoints
-	std::vector<KeyPoint> waypointPoints;
+	std::vector<Point2f> waypointPoints;
 	detector.detect( contoursInv, keypoints_1 );
 
 	std::cout<< "Keypoint vector length: " << keypoints_1.size() << std::endl;
 	if (keypoints_1.size() > 0) {
 		std::cout << "Window dimensions: " << width << ", " << height << std::endl;
 
-		for (int i = 1; i <= numChunks; i++) {
+		for (int i = 0; i < numChunks; i++) {
 			float xSum = 0;
 			float ySum = 0;
-			float roiMinCutoff = height/2;
-			float roiMaxCutoff = height - height/4;
-			float curMin = roiMinCutoff+(i*((roiMaxCutoff - roiMinCutoff)/numChunks));
-			float curMax = curMin + height/2*numChunks;
+			float roiMinCutoff = height/2; // bounds roi to bottom half of image
+			float roiMaxCutoff = height - 3*(height/8); // bounds roi on bottom
+			float increment = (roiMaxCutoff - roiMinCutoff)/numChunks;
+			float curMin = roiMinCutoff+(i*increment);
+			float curMax = curMin + increment;
 			int count = 0;
 			for (int j = 0; j < keypoints_1.size(); j++) {
-				if (keypoints_1[j].pt.y <= curMin && keypoints_1[j].pt.y <= curMax) {
+				if (keypoints_1[j].pt.y >= curMin && keypoints_1[j].pt.y <= curMax) {
 					xSum += keypoints_1[j].pt.x;
 					ySum += keypoints_1[j].pt.y;
 					count++;
 				}
 			}
 			cv::Point2f newWaypoint(xSum/count, ySum/count);
+			waypointPoints.push_back(newWaypoint);
 			std::cout << "New waypoint: " << newWaypoint.x << ", " << newWaypoint.y << std::endl;
 
 		}
-	}
-	//-- Draw keypoints
-	Mat img_keypoints_1;
-	drawKeypoints( contoursInv, keypoints_1, img_keypoints_1, Scalar::all(-1), DrawMatchesFlags::DEFAULT );
 
-	//-- Show detected keypoints
-	imshow("Keypoints 1", img_keypoints_1 );
+		//-- Draw keypoints
+		Mat img_keypoints_1;
+		//uncomment to show feature points (also need to replace contoursInv below this with img_keypoints_1):
+		//drawKeypoints( contoursInv, keypoints_1, img_keypoints_1, Scalar::all(-1), DrawMatchesFlags::DEFAULT );
+
+		int thickness = 2;
+		int lineType = 8;
+		std::cout << "waypointPoints.size() : " << waypointPoints.size() << std::endl;
+
+		int pointThickness = -1;
+		int pointRadius = 6;
+		//ineType = 8;
+
+		//print waypoints:
+		for (int i = 0; i < waypointPoints.size() - 1; i++) {
+			// std::cout << "Point to print: " << waypointPoints[i].x << ", " << waypointPoints[i].y << std::endl;
+			// std::cout << "Point to print: " << waypointPoints[i+1].x << ", " << waypointPoints[i+1].y << std::endl;
+			circle( contoursInv, waypointPoints[i], pointRadius, Scalar( 0, 0, 255 ), pointThickness, lineType );
+			line( contoursInv, waypointPoints[i], waypointPoints[i+1], Scalar( 200, 100, 0 ), thickness, lineType );
+		}
+
+		circle( contoursInv, waypointPoints[waypointPoints.size() - 1], pointRadius, Scalar( 0, 0, 255 ), pointThickness, lineType );
+
+
+
+		//-- Show detected keypoints
+		imshow("Keypoints 1", contoursInv ); 
+	}
+	
 
 	//////////// end feature detection /////////////////
 
