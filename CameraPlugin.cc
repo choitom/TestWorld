@@ -138,7 +138,7 @@ void CameraPlugin::OnUpdate()
     Mat draw = contoursInv.clone();
     polylines(draw, &point, &n, 1, true, Scalar(0, 0, 0), 3, CV_AA); //CV_AA is anti-aliasing flag
     // save this for debugging
-    imwrite("draw.jpg", draw);
+    // imwrite("draw.jpg", draw);
 
     // Assemble a rotated rectangle out of that info
     RotatedRect box = minAreaRect(cv::Mat(trapezoid_view_points));
@@ -173,7 +173,7 @@ void CameraPlugin::OnUpdate()
     cv::transpose(rotated, rotated);
     cv::flip(rotated, rotated, 0);
 
-    imwrite("rotated.jpg", rotated);
+    // imwrite("rotated.jpg", rotated);
     //namedWindow("Camera View", CV_WINDOW_AUTOSIZE);
     //imshow("CameraView", rotated);
 	/////////////// end perspective transform //////////////
