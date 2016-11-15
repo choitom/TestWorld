@@ -186,40 +186,26 @@ void CameraPlugin::OnUpdate()
 	/////////// feature detection /////////////////////
     ////// from http://docs.opencv.org/2.4/doc/tutorials/features2d/feature_detection/feature_detection.html  ///////////
 
-	int minHessian = 1200;
+	int minHessian = 1200; // higher means fewer points detected
 
 	SurfFeatureDetector detector( minHessian );
-
-	//TODO: iterate through vector, make vector of limited number of points per y window
-	// (get using average)
-
 	std::vector<KeyPoint> keypoints_1; //, keypoints_2;
 
-	int numChunks = 6; // number of waypoints
+	int numChunks = 3; // number of waypoints
 	std::vector<KeyPoint> waypointPoints;
-
-
-	// 	printf("keypoint y: %i \n", keypoints_1._pt.y);
-	//for (int i = 0; i < waypointChunks; i++) {
-		//std::cout << "Keypoint x and y: (" << keypoints_1[i].pt.x << "," << keypoints_1[i].pt.y << ") " << std:: endl;// << box.size.width << "x" << box.size.height << std::endl;
-		// printf("keypoint x: %f \n", keypoints_1[i].pt.x);
-
-		// printf("keypoint y: %f \n", keypoints_1[i].pt.y);
-		//for
-	//}
-
 	detector.detect( contoursInv, keypoints_1 );
-	//detector.detect( img_2, keypoints_2 );
 
 	std::cout<< "Keypoint vector length: " << keypoints_1.size() << std::endl;
 	if (keypoints_1.size() > 0) {
-		std::cout << "Keypoint x and y: (" << keypoints_1[0].pt.x << "," << keypoints_1[0].pt.y << ") " << std::endl;
+		std::cout << "Window dimensions: " << width << ", " << height << std::endl;
 
 		for (int i = 1; i <= numChunks; i++) {
 			float xSum = 0;
 			float ySum = 0;
-			float curMin = i*(height/numChunks);
-			float curMax = curMin + height/numChunks;
+			float roiMinCutoff = height/2;
+			float roiMaxCutoff = height - height/4;
+			float curMin = roiMinCutoff+(i*((roiMaxCutoff - roiMinCutoff)/numChunks));
+			float curMax = curMin + height/2*numChunks;
 			int count = 0;
 			for (int j = 0; j < keypoints_1.size(); j++) {
 				if (keypoints_1[j].pt.y <= curMin && keypoints_1[j].pt.y <= curMax) {
@@ -235,16 +221,10 @@ void CameraPlugin::OnUpdate()
 	}
 	//-- Draw keypoints
 	Mat img_keypoints_1;
-	//Mat img_keypoints_2;
-
 	drawKeypoints( contoursInv, keypoints_1, img_keypoints_1, Scalar::all(-1), DrawMatchesFlags::DEFAULT );
-	//drawKeypoints( img_2, keypoints_2, img_keypoints_2, Scalar::all(-1), DrawMatchesFlags::DEFAULT );
 
-	//-- Show detected (drawn) keypoints
+	//-- Show detected keypoints
 	imshow("Keypoints 1", img_keypoints_1 );
-	//imshow("Keypoints 2", img_keypoints_2 );
-
-
 
 	//////////// end feature detection /////////////////
 
