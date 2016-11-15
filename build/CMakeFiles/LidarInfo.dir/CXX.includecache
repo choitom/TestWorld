@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/Ruyi/desktop/TestWorld/LidarInfo.cc
+stdio.h
+-
+LidarInfo.hh
+/Users/Ruyi/desktop/TestWorld/LidarInfo.hh
+
+/Users/Ruyi/desktop/TestWorld/LidarInfo.hh
+
