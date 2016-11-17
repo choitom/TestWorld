@@ -26,6 +26,20 @@ void CarPlugin::OnUpdate(const common::UpdateInfo & /*_info*/) {
 	//dataProcessing::GetLanePosition();
 	//std::vector<double>* frontLidar = dataProcessing::GetLidarData(FRONT);
 
+	this->UpdateCarPosition();
+
 	// apply small linear velocity for testing
 	//this->model->SetLinearVel(math::Vector3(3,0,0));
+}
+
+void CarPlugin::UpdateCarPosition() {
+	double x, y, z;
+	math::Pose pose;
+	pose = this->model->GetWorldPose();
+	math::Vector3 v(0, 0, 0);
+	v = pose.pos;
+	x = v.x;
+	y = v.y;
+	z = v.z;
+	dataProcessing::UpdateCarPosition(x,y,z);
 }

@@ -32,9 +32,7 @@ void dataProcessing::UpdateCameraData(double newLanePositionX, double newLanePos
 
 // Update the absolute coordinates of the car in the world
 void dataProcessing::UpdateCarPosition(double x, double y, double z) {
-	carX = x;
-	carY = y;
-	carZ = z;
+	
 }
 
 // Update lidar data
