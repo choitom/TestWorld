@@ -162,7 +162,7 @@ void CameraPlugin::OnUpdate()
     //           cv::line(contoursInv, pt1, pt2, color);
 		// ++it; }
 		// it = lines.begin();
-		imshow("source", contoursInv);
+		//imshow("source", contoursInv);
 
 	// // Update our steering based on the lane markers
 	// double angle_average = (left_lane_marker[1]+right_lane_marker[1]) /2;
@@ -228,7 +228,7 @@ void CameraPlugin::OnUpdate()
 	/////////// feature detection /////////////////////
     ////// from http://docs.opencv.org/2.4/doc/tutorials/features2d/feature_detection/feature_detection.html  ///////////
 
-	int minHessian = 1200; // higher means fewer points detected
+	int minHessian = 300;//1200; // higher means fewer points detected
 
 	SurfFeatureDetector detector( minHessian );
 	std::vector<KeyPoint> keypoints_1; //, keypoints_2;
@@ -242,8 +242,9 @@ void CameraPlugin::OnUpdate()
 		std::cout << "Window dimensions: " << width << ", " << height << std::endl;
 
 		float roiMinCutoff = height/2; // bounds roi to bottom half of image
-		float roiMaxCutoff = height - 3*(height/8); // bounds roi on bottom 
+		float roiMaxCutoff = height - (height/3); // bounds roi on bottom 
 		float increment = (roiMaxCutoff - roiMinCutoff)/numChunks;
+		float rightWeightScale = 0.05;
 		for (int i = 0; i < numChunks; i++) {
 			float xSum = 0;
 			float ySum = 0;
@@ -252,7 +253,7 @@ void CameraPlugin::OnUpdate()
 			int count = 0;
 			for (int j = 0; j < keypoints_1.size(); j++) {
 				if (keypoints_1[j].pt.y >= curMin && keypoints_1[j].pt.y <= curMax) {
-					xSum += keypoints_1[j].pt.x;
+					xSum += keypoints_1[j].pt.x+rightWeightScale*width;
 					ySum += keypoints_1[j].pt.y;
 					count++;
 				}
