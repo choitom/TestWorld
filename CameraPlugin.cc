@@ -199,12 +199,12 @@ void CameraPlugin::OnUpdate()
 	if (keypoints_1.size() > 0) {
 		std::cout << "Window dimensions: " << width << ", " << height << std::endl;
 
+		float roiMinCutoff = height/2; // bounds roi to bottom half of image
+		float roiMaxCutoff = height - 3*(height/8); // bounds roi on bottom 
+		float increment = (roiMaxCutoff - roiMinCutoff)/numChunks;
 		for (int i = 0; i < numChunks; i++) {
 			float xSum = 0;
 			float ySum = 0;
-			float roiMinCutoff = height/2; // bounds roi to bottom half of image
-			float roiMaxCutoff = height - 3*(height/8); // bounds roi on bottom
-			float increment = (roiMaxCutoff - roiMinCutoff)/numChunks;
 			float curMin = roiMinCutoff+(i*increment);
 			float curMax = curMin + increment;
 			int count = 0;
