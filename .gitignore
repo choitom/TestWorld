@@ -1,1 +1,8 @@
 build/*
+.DS_Store
+model/.DS_Store
+model/comps_road/.DS_Store
+model/comps_road/materials/.DS_Store
+model/curved_road/.DS_Store
+model/curved_road/materials/.DS_Store
+model/curved_road/materials/textures/.DS_Store
