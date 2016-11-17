@@ -18,7 +18,7 @@ namespace gazebo {
 			CarPlugin();
 			void Load(physics::ModelPtr _model, sdf::ElementPtr _Sdf);
 			void OnUpdate(const common::UpdateInfo & /*_info*/);
-			void UpdateCarPosition();
+			void updateCarPosition();
 		private:
 			physics::ModelPtr model;
 			event::ConnectionPtr updateConnection;
