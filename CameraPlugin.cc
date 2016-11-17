@@ -77,50 +77,92 @@ void CameraPlugin::OnUpdate()
 	HoughLines(contoursInv,lines,1,PI/180, 75);
 
 	std::vector<cv::Vec2f>::const_iterator it= lines.begin();
+
+	//vertical angle is 0
+	// horizontal angel is 2/pi
 	double leftEdgeAngle = 0;
 	double rightEdgeAngle = 0;
+	double leftRho= 0;
+	double rightRho= 0;
 
-	// The part of straight lane detection
+	//The part of straight lane detection
 	while (it!=lines.end()) {
+		double currentRho = (*it)[0];
     double currentAngle = (*it)[1];
 
     // horizontal lines are 90 degrees and vertical lines are 0 degrees.
     if (0 < currentAngle <= (PI/2) && currentAngle < leftEdgeAngle) {
       leftEdgeAngle = currentAngle;
+			leftRho = currentRho;
     } else if (PI/2 <= currentAngle < PI && currentAngle > rightEdgeAngle) {
       rightEdgeAngle = currentAngle;
+			rightRho = currentRho;
     }
+		//cv::Point pt1(currentRho/cos(currentAngle),0);
+		//cv::Point pt2((currentRho-image.rows*sin(currentAngle))/cos(currentAngle),image.rows);
+		//cv::line(contoursInv, pt1, pt2, cv::Scalar(143), 1);
+		//std::cout << "Pt1 is "<< pt1 << "AND Pt2 is " << pt2 << "\n" << std::endl;
     ++it;
   }
 
-  // Turning angle would be the average angels of left edge and right egde
-	double turningAngle = (leftEdgeAngle+rightEdgeAngle)/2;
+	cv::Point pt1(leftRho/cos(leftEdgeAngle),0);
+	cv::Point pt1_1(rightRho/cos(rightEdgeAngle),0);
+	// point of intersection of the line with last row
+	cv::Point pt2((leftRho-image.rows*sin(leftEdgeAngle))/cos(leftEdgeAngle),image.rows);
+	cv::Point pt2_1((rightRho-image.rows*sin(rightEdgeAngle))/cos(rightEdgeAngle),image.rows);
+	// draw a gray line
+	cv::line(contoursInv, pt1, pt2, cv::Scalar(143), 1);
+	cv::line(contoursInv, pt1_1, pt2_1, cv::Scalar(143), 1);
 
-	//imshow("source", image);
-	//imshow("detected lines", cdst);
-	while (it!=lines.end()) {
-		float rho= (*it)[0];   // first element is distance rho
-		float theta= (*it)[1]; // second element is angle theta
-		if (theta < PI/4.
-			|| theta > 3.*PI/4.) { // ~vertical line
-				// point of intersection of the line with first row
-				cv::Point pt1(rho/cos(theta),0);
-				// point of intersection of the line with last row
-				cv::Point pt2((rho-image.rows*sin(theta))/
-				cos(theta),image.rows);
-				// draw a white line
-				cv::line( image, pt1, pt2, cv::Scalar(255), 1);
-			} else { // ~horizontal line
-				// point of intersection of the
-				// line with first column
-				cv::Point pt1(0,rho/sin(theta));
-				// point of intersection of the line with last column
-				cv::Point pt2(image.cols,
-					(rho-image.cols*cos(theta))/sin(theta));
-					// draw a white line
-					cv::line(image, pt1, pt2, cv::Scalar(255), 1);
-				}
-				++it; }
+
+	// Turning angle would be the average angels of left edge and right egde
+	double turningAngle = (leftEdgeAngle+rightEdgeAngle)/2;
+	double turningRho = (leftRho+rightRho)/2;
+
+	cv::Point pt1_2(turningRho/cos(turningAngle),0);
+	cv::Point pt2_2((turningRho-image.rows*sin(turningAngle))/cos(turningAngle),image.rows);
+	cv::line(contoursInv, pt1_2, pt2_2, cv::Scalar(143), 1);
+	std::cout << "Turning point1 is "<< pt1_1 << "Turning point2 is " << pt2_2 << "\n" << std::endl;
+
+
+	// Textbook way of prnting hough tranformation lines
+
+	//std::vector<cv::Vec2f>::const_iterator it= lines.begin();
+  //     while (it!=lines.end()) {
+  //        float rho= (*it)[0];   // first element is distance rho
+  //        float theta= (*it)[1]; // second element is angle theta
+  //        if (theta < PI/4.
+  //             || theta > 3.*PI/4.) { // ~vertical line
+  //           // point of intersection of the line with first row
+  //           cv::Point pt1(rho/cos(theta),0);
+  //           // point of intersection of the line with last row
+  //           cv::Point pt2((rho-image.rows*sin(theta))/
+  //                                    cos(theta),image.rows);
+  //           // draw a white line
+  //           cv::line(contoursInv, pt1, pt2, cv::Scalar(255), 1);
+  //        } else { // ~horizontal line
+  //           // point of intersection of the
+  //           // line with first column
+  //           cv::Point pt1(0,rho/sin(theta));
+  //           // point of intersection of the line with last column
+  //           cv::Point pt2(image.cols,
+  //              (rho-image.cols*cos(theta))/sin(theta));
+  //     // draw a white line
+  //     cv::line(contoursInv, pt1, pt2, cv::Scalar(255), 1);
+	// 		std::cout << "P1 is "<< pt1 << "AND P2 is " << ((*it)[2],(*it)[3]) << pt2 << "\n" << std::endl;
+	 //
+  //  }
+	//  ++it; }
+
+		// cv::Scalar color=cv::Scalar(255,255,255);
+		// while (it!=lines.end()) {
+    //           cv::Point pt1((*it)[0],(*it)[1]);
+    //           cv::Point pt2((*it)[2],(*it)[3]);
+		//
+    //           cv::line(contoursInv, pt1, pt2, color);
+		// ++it; }
+		// it = lines.begin();
+		imshow("source", contoursInv);
 
 	// // Update our steering based on the lane markers
 	// double angle_average = (left_lane_marker[1]+right_lane_marker[1]) /2;
@@ -247,9 +289,9 @@ void CameraPlugin::OnUpdate()
 
 
 		//-- Show detected keypoints
-		imshow("Keypoints 1", contoursInv ); 
+		imshow("Keypoints 1", contoursInv );
 	}
-	
+
 
 	//////////// end feature detection /////////////////
 
