@@ -96,7 +96,7 @@ void CameraPlugin::OnUpdate()
     HoughLines(canny, lines, 1, PI/180, 50, 0, 0);  // hough
     
     // inner most lines
-    float rho_left = FLT_MIN, theta_left = FLT_MIN;
+    float rho_left = FLT_MAX, theta_left = FLT_MAX;
     float rho_right = FLT_MIN, theta_right = FLT_MIN;
     
     for(size_t i = 0; i < lines.size(); i++)
@@ -124,7 +124,7 @@ void CameraPlugin::OnUpdate()
             }
             if(theta < PI/2)
             {
-                if(theta-PI/2 > theta_left-PI/2)
+                if(theta-PI/2 < theta_left-PI/2)
                 {
                     theta_left = theta;
                     rho_left = rho;
