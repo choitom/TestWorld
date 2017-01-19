@@ -63,8 +63,8 @@ void CameraPlugin::OnUpdate()
 	
     // Rectangular region of interest
     Mat rect_roi = image.clone();
-    int ROI_hi = (height*5/6);
-    int ROI_lo = height/1.7;
+    int ROI_lo = height/3.95;	// 121
+    int ROI_hi = height/1.12;	// 428
     
     for(int i = 0; i < rect_roi.rows; i++)
     {
@@ -86,14 +86,14 @@ void CameraPlugin::OnUpdate()
     cvtColor(rect_roi, gray, CV_BGR2GRAY);      // gray
     GaussianBlur(gray, gray, Size(5,5), 0, 0);  // blur
     
-    Mat ero(5,5, CV_8U,Scalar(1));
+    Mat ero(3,3, CV_8U,Scalar(1));
     morphologyEx(gray, gray, MORPH_OPEN, ero);
 
     Canny(gray, canny, 128, 255);   // edge detect
     
     cvtColor(canny, hough, CV_GRAY2BGR);
     vector<Vec2f> lines;
-    HoughLines(canny, lines, 1, PI/180, 50, 0, 0);  // hough
+    HoughLines(canny, lines, 1, PI/180, 60, 0, 0);  // hough
     
     // inner most lines
     float rho_left = FLT_MAX, theta_left = FLT_MAX;
@@ -102,7 +102,7 @@ void CameraPlugin::OnUpdate()
     for(size_t i = 0; i < lines.size(); i++)
     {
         float rho = lines[i][0], theta = lines[i][1];
-        if(0.1 < theta && theta < 1.44 || theta > 1.66 && theta < 3.14)
+        if(0.4 < theta && theta < 1.51 || theta > 1.62 && theta < 3)
         {
             Point pt1, pt2;
             double a = cos(theta), b = sin(theta);
