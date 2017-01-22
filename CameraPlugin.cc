@@ -86,7 +86,7 @@ void CameraPlugin::OnUpdate()
     cvtColor(rect_roi, gray, CV_BGR2GRAY);      // gray
     GaussianBlur(gray, gray, Size(5,5), 0, 0);  // blur
     
-    Mat ero(3,3, CV_8U,Scalar(1));
+    Mat ero(5,5, CV_8U,Scalar(1));
     morphologyEx(gray, gray, MORPH_OPEN, ero);
 
     Canny(gray, canny, 128, 255);   // edge detect
