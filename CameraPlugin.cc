@@ -61,39 +61,80 @@ void CameraPlugin::OnUpdate()
 	// create image matrix
 	Mat image = Mat(height, width, CV_8UC3, const_cast<unsigned char*>(imageData));
 	
+    
     // Rectangular region of interest
-    Mat rect_roi = image.clone();
     int ROI_lo = height/3.95;	// 121
     int ROI_hi = height/1.12;	// 428
     
-    for(int i = 0; i < rect_roi.rows; i++)
+    Mat rect_roi(image.size(), image.type());
+    image.copyTo(rect_roi);
+    ROI(rect_roi, ROI_lo, ROI_hi);
+    
+    
+    // Create sub ROIs
+    int n_sub = 2;
+    int interval = (ROI_hi-ROI_lo)/n_sub;
+    
+    int sub_lo = ROI_lo;
+    int sub_hi;
+    
+    vector<Mat> subs;
+    for(int i = 0; i < n_sub; i++)
     {
-        if(i < ROI_lo || i > ROI_hi)
-        {
-            for(int j = 0; j < rect_roi.cols; j++)
-            {
-                rect_roi.at<Vec3b>(i,j)[0] = 0;
-                rect_roi.at<Vec3b>(i,j)[1] = 0;
-                rect_roi.at<Vec3b>(i,j)[2] = 0;
-            }
-        }
+        Mat sub(rect_roi.size(), rect_roi.type());
+        rect_roi.copyTo(sub);
+        sub_hi = sub_lo + interval;
+        ROI(sub, sub_lo, sub_hi);
+        subs.push_back(sub);
+        sub_lo = sub_hi;
     }
     
     
-    // Gray -> Gaussian blur -> Opening -> EDGE -> HOUGH
-    Mat gray, canny, hough;
+    // Process each sub ROI
+    vector<Mat> proc_subs;
+    for(size_t i = 0; i < subs.size(); i++)
+    {
+        proc_subs.push_back(preprocess(subs[i]));
+    }
     
-    cvtColor(rect_roi, gray, CV_BGR2GRAY);      // gray
-    GaussianBlur(gray, gray, Size(5,5), 0, 0);  // blur
+	
+    // For each sub ROI, find vanishing point
+    vector<Point> pts;
+    for(size_t i = 0; i < proc_subs.size(); i++)
+    {
+        int lo = ROI_lo + i * interval;
+        int hi = lo + interval;
+        Point pt = vanishPoint(proc_subs[i], (lo+hi)/2);
+        pts.push_back(pt);
+        
+        circle(image, pt, 2, Scalar(255,0,0), 3);
+    }
     
-    Mat ero(5,5, CV_8U,Scalar(1));
-    morphologyEx(gray, gray, MORPH_OPEN, ero);
+    imshow("img", image);
+    
+    waitKey(4);
+}
 
-    Canny(gray, canny, 128, 255);   // edge detect
-    
-    cvtColor(canny, hough, CV_GRAY2BGR);
+void CameraPlugin::ROI(Mat &mat, int lo, int hi)
+{  
+    for(size_t i = 0; i < mat.rows; i++)
+    {
+        if(i < lo || i > hi)
+        {
+            for(size_t j = 0; j < mat.cols; j++)
+            {
+                mat.at<Vec3b>(i,j)[0] = 0;
+                mat.at<Vec3b>(i,j)[1] = 0;
+                mat.at<Vec3b>(i,j)[2] = 0;
+            }
+        }
+    }   
+}
+
+Point CameraPlugin::vanishPoint(Mat mat, int mid)
+{
     vector<Vec2f> lines;
-    HoughLines(canny, lines, 1, PI/180, 60, 0, 0);  // hough
+    HoughLines(mat, lines, 1, PI/180, 48, 0, 0);
     
     // inner most lines
     float rho_left = FLT_MAX, theta_left = FLT_MAX;
@@ -102,18 +143,8 @@ void CameraPlugin::OnUpdate()
     for(size_t i = 0; i < lines.size(); i++)
     {
         float rho = lines[i][0], theta = lines[i][1];
-        if(0.4 < theta && theta < 1.51 || theta > 1.62 && theta < 3)
+        if(0.1 < theta && theta < 1.5 || theta > 1.62 && theta < 3.14)
         {
-            Point pt1, pt2;
-            double a = cos(theta), b = sin(theta);
-            double x0 = a*rho, y0 = b*rho;
-            pt1.x = cvRound(x0 + 1000*(-b));
-            pt1.y = cvRound(y0 + 1000*(a));
-            pt2.x = cvRound(x0 - 1000*(-b));
-            pt2.y = cvRound(y0 - 1000*(a));
-            line(hough, pt1, pt2, Scalar(0,0,255), 2, CV_AA);
-            
-            // find the inner most lanes
             if(theta > PI/2)
             {
                 if(theta-PI/2 > theta_right-PI/2)
@@ -130,40 +161,44 @@ void CameraPlugin::OnUpdate()
                     rho_left = rho;
                 }
             }
-        }   
+        }
     }
     
-    // find intersection point of the innermost lines
-    cout << theta_left << ", " << theta_right << endl;
-    cout << rho_left << ", " << rho_right << endl;
-    
+    // convert polar to Cartesian
     double a1 = -(cos(theta_left)/sin(theta_left));
     double b1 = rho_left/sin(theta_left);
     
     double a2 = -(cos(theta_right)/sin(theta_right));
     double b2 = rho_right/sin(theta_right);
     
+    // find intersection of two equations
     double x = (b1-b2)/(a2-a1);
     double y = a1 * x + b1;
     
-    Point intersection = Point(x,y);
+    double x2 = mat.cols/2;
+    double y2 = mat.rows;
     
-    // draw the intersection point
-    circle(hough, intersection, 1, Scalar(255,0,0), 3);
+    // y = mx + n, x = (y-n)/m
+    double m = (y2-y)/(x2-x);
+    double n = -m*x+y;
     
+    // find x, given y = mid
+    int waypoint_x = (mid-n)/m;
     
-    imshow("roi", rect_roi);
-    imwrite("roi.bmp", rect_roi);
+    return Point(waypoint_x,mid);
+}
+
+// Gray -> Gaussian Blur -> Morph Open -> Edge
+Mat CameraPlugin::preprocess(Mat mat)
+{
+    Mat gray, morph, canny;
+    cvtColor(mat, gray, CV_BGR2GRAY);
+    GaussianBlur(gray, gray, Size(5,5), 0, 0);
     
-    imshow("canny", canny);
-    imwrite("canny.bmp", canny);
+    Mat erosion(5, 5, CV_8U, Scalar(1));
+    morphologyEx(gray, morph, MORPH_OPEN, erosion);
     
-    imshow("gray", gray);
-    imwrite("gray.bmp", gray);
+    Canny(gray, canny, 128, 255);
     
-    imshow("hough", hough);
-    imwrite("hough.bmp", hough);
-    
-    
-	waitKey(4);
+    return canny;
 }

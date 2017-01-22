@@ -24,7 +24,10 @@ namespace gazebo
 	{
 		public: virtual void Load(sensors::SensorPtr _sensor, sdf::ElementPtr /*_sdf*/);
 		public: void OnUpdate();
-
+        public: void ROI(cv::Mat &m, int lo, int hi);
+        public: cv::Mat preprocess(cv::Mat m);
+        public: cv::Point vanishPoint(cv::Mat m, int mid);
+        
 		private: sensors::MultiCameraSensorPtr parentSensor;
 		private: event::ConnectionPtr updateConnection;
 	};
