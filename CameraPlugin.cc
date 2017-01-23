@@ -63,8 +63,8 @@ void CameraPlugin::OnUpdate()
 	
     
     // Rectangular region of interest
-    int ROI_lo = height/3.95;	// 121
-    int ROI_hi = height/1.12;	// 428
+    int ROI_lo = height/9;	
+    int ROI_hi = height/1.02;
     
     Mat rect_roi(image.size(), image.type());
     image.copyTo(rect_roi);
@@ -72,7 +72,7 @@ void CameraPlugin::OnUpdate()
     
     
     // Create sub ROIs
-    int n_sub = 2;
+    int n_sub = 3;
     int interval = (ROI_hi-ROI_lo)/n_sub;
     
     int sub_lo = ROI_lo;
@@ -89,6 +89,9 @@ void CameraPlugin::OnUpdate()
         sub_lo = sub_hi;
     }
     
+    imshow("sub0", subs[0]);
+    imshow("sub1", subs[1]);
+    imshow("sub2", subs[2]);
     
     // Process each sub ROI
     vector<Mat> proc_subs;
@@ -111,6 +114,7 @@ void CameraPlugin::OnUpdate()
     }
     
     imshow("img", image);
+    imwrite("waypoints.png", image);
     
     waitKey(4);
 }
@@ -134,7 +138,7 @@ void CameraPlugin::ROI(Mat &mat, int lo, int hi)
 Point CameraPlugin::vanishPoint(Mat mat, int mid)
 {
     vector<Vec2f> lines;
-    HoughLines(mat, lines, 1, PI/180, 48, 0, 0);
+    HoughLines(mat, lines, 1, PI/180, 38, 0, 0);
     
     // inner most lines
     float rho_left = FLT_MAX, theta_left = FLT_MAX;
