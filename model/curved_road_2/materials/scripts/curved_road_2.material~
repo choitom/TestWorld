@@ -7,8 +7,8 @@ material curved_road_2
 		{
 			texture_unit
 			{
-				texture curve.png
-				scale 1 .1
+				texture curve2.png
+				scale 1 1
 			}
 		}
 	}
