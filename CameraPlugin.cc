@@ -72,7 +72,7 @@ void CameraPlugin::OnUpdate()
     
     
     // Create sub ROIs
-    int n_sub = 2;
+    int n_sub = 3;
     int interval = (ROI_hi-ROI_lo)/n_sub;
     
     int sub_lo = ROI_lo;
