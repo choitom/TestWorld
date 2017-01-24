@@ -72,7 +72,7 @@ void CameraPlugin::OnUpdate()
     
     
     // Create sub ROIs
-    int n_sub = 3;
+    int n_sub = 2;
     int interval = (ROI_hi-ROI_lo)/n_sub;
     
     int sub_lo = ROI_lo;
@@ -107,7 +107,7 @@ void CameraPlugin::OnUpdate()
     {
         int lo = ROI_lo + i * interval;
         int hi = lo + interval;
-        Point pt = vanishPoint(proc_subs[i], (lo+hi)/2);
+        Point pt = vanishPoint(proc_subs[i], lo);
         pts.push_back(pt);
         
         circle(image, pt, 2, Scalar(255,0,0), 3);
