@@ -13,9 +13,9 @@
       </attenuation>
       <direction>-0.5 0.1 -0.9</direction>
     </light>
-    <!--<include>
+    <include>
 	<uri>/model/sdcCar</uri>
-    </include>-->
+    </include>
     <model name='ground_plane'>
       <static>1</static>
       <link name='link'>
