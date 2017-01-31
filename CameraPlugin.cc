@@ -298,7 +298,6 @@ cv::Vec3f CameraPlugin::getObjectColor(int left_edge, int right_edge, int height
 
     int avgThickness = 2;
     int avgLineType = 8;
-    std::cout << "points_in_roi.size() : " << points_in_roi.size() << std::endl;
 
     int avgPointThickness = -1;
     int avgPointRadius = 6;
@@ -306,19 +305,14 @@ cv::Vec3f CameraPlugin::getObjectColor(int left_edge, int right_edge, int height
 
     float red_sum, green_sum, blue_sum = 0;
 
-    //print waypoints:
+    //get average color of points
     for (int i = 0; i < points_in_roi.size() - 1; i++) {
-            // get avg_color
         Vec3b intensity = image.at<cv::Vec3b>(points_in_roi[i].x, 200);
-        //std::cout << "intensity x y z: " << intensity[x] << ", " << intensity[y] << ", " << std::endl;
 
         blue_sum += intensity.val[0];
         green_sum += intensity.val[1];
         red_sum += intensity.val[2];
-        // std::cout << "Point to print: " << waypointPoints[i].x << ", " << waypointPoints[i].y << std::endl;
-        // std::cout << "Point to print: " << waypointPoints[i+1].x << ", " << waypointPoints[i+1].y << std::endl;
         circle( image, points_in_roi[i], avgPointRadius, Scalar( 0, 0, 255 ), avgPointThickness, avgLineType );
-        //line( contoursInv, waypointPoints[i], waypointPoints[i+1], Scalar( 200, 100, 0 ), thickness, lineType );
 
     }
 
@@ -328,12 +322,12 @@ cv::Vec3f CameraPlugin::getObjectColor(int left_edge, int right_edge, int height
     float green_avg = green_sum/3;
     float red_avg = red_sum/3;
 
-    Vec3b avg_color(blue_avg, green_avg, red_avg);
+    Vec3f avg_color(blue_avg, green_avg, red_avg);
 
     std::cout << "obstacle color: " << blue_avg << ", " << green_avg << ", " << red_sum << std::endl;
 
 
     //-- Show detected keypoints
     imshow("Average sample locations", image);  
-    //return avg_color;
+    return avg_color;
 }

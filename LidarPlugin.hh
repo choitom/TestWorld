@@ -8,6 +8,7 @@
 #include <gazebo/sensors/sensors.hh>
 #include <gazebo/common/common.hh>
 #include <vector>
+#include <math.h>
 
 #include "dataProcessing.hh"
 
@@ -20,6 +21,7 @@ namespace gazebo
 
 		public: virtual void Load(sensors::SensorPtr _sensor, sdf::ElementPtr /*_sdf*/);
 		private: void OnUpdate();
+		private: void getVisibleObject(std::vector<double>* objectRays);
 		
 		private: sensors::RaySensorPtr parentSensor;
 		private: event::ConnectionPtr updateConnection;

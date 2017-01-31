@@ -5,6 +5,7 @@
 #include <gazebo/common/common.hh>
 #include <stdio.h>
 #include <vector>
+#include <math.h>
 
 #include "LidarPlugin.hh"
 
@@ -61,4 +62,26 @@ void LidarPlugin::OnUpdate()
 	{
 		std:: cout << "(" << i << ") ";
 	}*/
+	//getVisibleObject(rays)
+}
+
+// I'll go over this with Ruyi and once we decide if it looks okay we'll
+// move it to the main repo and have it return an sdcVisibleObject
+void LidarPlugin::getVisibleObject(std::vector<double>* objectRays) {
+	float left, right = -1;
+	float maxDistance = INT_MAX;
+	bool objectIsDetected = false;
+	for (int i = 0; i < objectRays->size(); i++) {
+		if (!isinf(objectRays->at(i)) && objectRays->at(i) < maxDistance) {
+			maxDistance = objectRays->at(i);
+		}
+		if (!objectIsDetected && isinf(objectRays->at(i))) {
+			objectIsDetected = true;
+			left = i;
+		} else if (objectIsDetected && isinf(objectRays->at(i))) {
+			objectIsDetected = false;
+			right = i-1;
+		}
+	}
+	//return visibleobject
 }
