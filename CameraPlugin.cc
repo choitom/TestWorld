@@ -282,3 +282,58 @@ Mat CameraPlugin::preprocess(Mat mat)
 
     return canny;
 }
+
+///////////// obstacle code ////////////////
+//use getBlockedFrontRays in sdcSensorData to get real 
+//coords of object
+cv::Vec3f CameraPlugin::getObjectColor(int left_edge, int right_edge, int height, Mat image) {
+    std::vector<Point2f> points_in_roi;
+
+    for (int i = left_edge; i < right_edge; i = i + (right_edge/5)) {
+        std::cout << "in first for od" << std::endl;
+        cv::Point2f point_to_avg(i, height/2);
+        points_in_roi.push_back(point_to_avg);
+    }
+
+
+    int avgThickness = 2;
+    int avgLineType = 8;
+    std::cout << "points_in_roi.size() : " << points_in_roi.size() << std::endl;
+
+    int avgPointThickness = -1;
+    int avgPointRadius = 6;
+    //ineType = 8;
+
+    float red_sum, green_sum, blue_sum = 0;
+
+    //print waypoints:
+    for (int i = 0; i < points_in_roi.size() - 1; i++) {
+            // get avg_color
+        Vec3b intensity = image.at<cv::Vec3b>(points_in_roi[i].x, 200);
+        //std::cout << "intensity x y z: " << intensity[x] << ", " << intensity[y] << ", " << std::endl;
+
+        blue_sum += intensity.val[0];
+        green_sum += intensity.val[1];
+        red_sum += intensity.val[2];
+        // std::cout << "Point to print: " << waypointPoints[i].x << ", " << waypointPoints[i].y << std::endl;
+        // std::cout << "Point to print: " << waypointPoints[i+1].x << ", " << waypointPoints[i+1].y << std::endl;
+        circle( image, points_in_roi[i], avgPointRadius, Scalar( 0, 0, 255 ), avgPointThickness, avgLineType );
+        //line( contoursInv, waypointPoints[i], waypointPoints[i+1], Scalar( 200, 100, 0 ), thickness, lineType );
+
+    }
+
+    circle( image, points_in_roi[points_in_roi.size() - 1], avgPointRadius, Scalar( 0, 0, 255 ), avgPointThickness, avgLineType );
+
+    float blue_avg = blue_sum/3;
+    float green_avg = green_sum/3;
+    float red_avg = red_sum/3;
+
+    Vec3b avg_color(blue_avg, green_avg, red_avg);
+
+    std::cout << "obstacle color: " << blue_avg << ", " << green_avg << ", " << red_sum << std::endl;
+
+
+    //-- Show detected keypoints
+    imshow("Average sample locations", image);  
+    //return avg_color;
+}

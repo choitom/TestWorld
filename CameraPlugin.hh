@@ -26,6 +26,7 @@ namespace gazebo
 		public: void OnUpdate();
         public: void ROI(cv::Mat &m, int lo, int hi);
         public: cv::Mat preprocess(cv::Mat m);
+    	public: cv::Vec3f getObjectColor(int left_edge, int right_edge, int height, cv::Mat image);
         public: std::vector<cv::Point> vanishPoint(cv::Mat m, int mid);
 				public: double getAngle (int firstX, int firsty, int secondX, int secondY, double previousAngle);
 
